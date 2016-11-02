@@ -6,7 +6,7 @@
         <extension point="xbmc.addon.repository" name="UFO">
             <info compressed="false">https://raw.githubusercontent.com/gentec1/oTTtv/master/addons.xml</info>
             <checksum>https://raw.githubusercontent.com/gentec1/oTTtv/master/addons.xml.md5</checksum>
-            <datadir zip="true">https://raw.github.com/gentec1/oTTtv/master</datadir>
+            <datadir zip="true">https://raw.github.com/gentec1/oTTtv/master/</datadir>
             <hashes>false</hashes>
         </extension>
         <extension point="xbmc.addon.metadata">
