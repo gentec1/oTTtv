@@ -1,8 +1,10 @@
 <settings>
-    <setting id="Password" value="barry0028" />
-    <setting id="Username" value="baz" />
-    <setting id="extend" value="m3u8" />
-    <setting id="note" value="Once details enter click clear cache after ok " />
-    <setting id="vanemakood" value="1234" />
-    <setting id="vanemalukk" value="false" />
+<category label="General">
+     <setting id="Username" type="text" label="Username" default=""/>
+     <setting id="Password" type="text" option="writeable,hidden" label="Password" default=""/>
+	 <setting id="note" type="text" label="Note:" default="Welcome To OTTTV"/>
+	 <setting id="vanemalukk" type="bool" label="Parental lock?"value="true"/>
+	 <setting id="vanemakood" type="text" option="writeable,hidden" label="Parental code" default="1234"/>
+	 <setting id="extend" type="select" label="Player Format" values="ts|m3u8" default="ts" />
+</category>
 </settings>
