@@ -2,7 +2,7 @@
 <addons>
 <addon id="plugin.video.ottalpha"
        name="[COLOR red]Over The Top[COLOR white] TV[/COLOR]"
-       version="2.0"
+       version="2.1"
        provider-name="OTTTV">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>

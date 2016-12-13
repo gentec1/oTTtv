@@ -36,7 +36,7 @@ def run():
     if not kasutajanimi:
         kasutajanimi = "NONE"
         salasona="NONE"
-    lehekylg="http://otttv.gq"
+    lehekylg="http://otttv.co"
     pordinumber="2095"
     uuendused=plugintools.get_setting(sync_data("dXVlbmR1c2Vk"))
     vanemalukk=plugintools.get_setting(sync_data("dmFuZW1hbHVraw=="))
