@@ -50,7 +50,9 @@ def MyAccDetails(url):
         match=re.compile('"username":"(.+?)"').findall(link)
         match1=re.compile('"status":"(.+?)"').findall(link)
         match2=re.compile('"exp_date":"(.+?)"').findall(link) 	
+        match3=re.compile('"active_cons":"(.+?)"').findall(link)
         match4=re.compile('"created_at":"(.+?)"').findall(link)
+        match5=re.compile('"max_connections":"(.+?)"').findall(link)
         match6=re.compile('"is_trial":"1"').findall(link)
         for url in match:
                 AddAccInfo('My Account Information','','',Images +'MyAcc.png')
@@ -65,6 +67,10 @@ def MyAccDetails(url):
                 dt = datetime.fromtimestamp(float(match2[0]))
                 dt.strftime('%Y-%m-%d %H:%M:%S')
                 AddAccInfo('Expires:  %s'%(dt),'','',Images +'MyAcc.png')
+        for url in match3:
+                AddAccInfo('Active Connection:  %s'%(url),'','',Images +'MyAcc.png')
+        for url in match5:
+                AddAccInfo('Max Connection:  %s'%(url),'','',Images +'MyAcc.png') 
         for url in match6:
                 AddAccInfo('Trial: Yes','','',Images +'MyAcc.png')
 	     
@@ -115,7 +121,48 @@ def Clear_Cache():
     choice = xbmcgui.Dialog().yesno('Clear your Cache?', 'If you still cant see your account after ok button is clicked your details are incorrect', nolabel='Cancel',yeslabel='Delete')
     if choice == 1:
         GoDev.Wipe_Cache()
-
+def wizard2(name,url,description):
+    path = xbmc.translatePath(os.path.join('special://home/addons','packages'))
+    dp = xbmcgui.DialogProgress()
+    dp.create("OTT TV WORKING HARD","Downloading ",'', 'Please Wait')
+    lib=os.path.join(path, name+'.zip')
+    try:
+       os.remove(lib)
+    except:
+       pass
+    downloader.download(url, lib, dp)
+    addonfolder = xbmc.translatePath(os.path.join('special://','home'))
+    time.sleep(2)
+    dp.update(0,"", "Extracting Zip Please Wait")
+    print '======================================='
+    print addonfolder
+    print '======================================='
+    extract.all(lib,addonfolder,dp)
+    dp = xbmcgui.Dialog()
+    dp.ok("OTTTV", 'TV Guide Integration Complete - Now open your TVGuide & Enjoy. Any Issues please ask us on facebook or check the website.', '', '')
+def addXMLMenu(name,url,mode,iconimage,fanart,description):
+        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&iconimage="+urllib.quote_plus(iconimage)+"&fanart="+urllib.quote_plus(fanart)+"&description="+urllib.quote_plus(description)
+        ok=True
+        liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+        liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": description } )
+        liz.setProperty( "Fanart_Image", fanart )
+        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=False)
+        return ok
+def ExtraMenu():
+    link = OPEN_URL('http://46.105.35.189/development/xml/toolboxextras.xml').replace('\n','').replace('\r','')  #Spaf
+    match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)"').findall(link)
+    for name,url,iconimage,FanArt,description in match:
+        addXMLMenu(name,url,6,iconimage,FanArt,description)
+def Movies():
+    link = OPEN_URL('http://builds.kodiuk.tv/development/xml/moviesandtv.xml').replace('\n','').replace('\r','')  #Spaf
+    match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)"').findall(link)
+    for name,url,iconimage,FanArt,description in match:
+        addXMLMenu(name,url,6,iconimage,FanArt,description)
+def TVShows():
+    link = OPEN_URL('http://builds.kodiuk.tv/development/xml/moviesandtv.xml').replace('\n','').replace('\r','')  #Spaf
+    match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)"').findall(link)
+    for name,url,iconimage,FanArt,description in match:
+        addXMLMenu(name,url,6,iconimage,FanArt,description)
 
 		
 
