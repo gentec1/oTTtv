@@ -10,8 +10,8 @@ ADDON = xbmcaddon.Addon(id='plugin.video.ottalpha')
 
 Username=xbmcplugin.getSetting(int(sys.argv[1]), 'Username')
 Password=xbmcplugin.getSetting(int(sys.argv[1]), 'Password')
-ServerURL = "http://178.33.226.155:25461/get.php?username=%s&password=%s&type=m3u&output=hls"%(Username,Password,)
-AccLink = "http://178.33.226.155:25461/panel_api.php?username=%s&password=%s"%(Username,Password,)
+ServerURL = "http://otttv.co:2095/get.php?username=%s&password=%s&type=m3u&output=hls"%(Username,Password,)
+AccLink = "http://otttv.co:2095/panel_api.php?username=%s&password=%s"%(Username,Password,)
 addonDir = Addon.getAddonInfo('path').decode("utf-8")
 Images=xbmc.translatePath(os.path.join('special://home','addons',AddonID,'resources/'));
 addon_data_dir = os.path.join(xbmc.translatePath("special://userdata/addon_data" ).decode("utf-8"), AddonID)
