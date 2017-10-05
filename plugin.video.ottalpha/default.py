@@ -1,1 +1,356 @@
-exec("import re;import base64");exec((lambda p,y:(lambda o,b,f:re.sub(o,b,f))(r"([0-9a-f]+)",lambda m:p(m,y),base64.b64decode("NTMgYjgsMTgsYjUsMWIxLDU5LDU0LDEyNCw5MywyYSwxMjksMzIsMTliCjUzIDE3Ngo1MyAxZAo1MyAxNmQsMTQ1LDE1NCwxMTQsZWYKNTMgZGEuMTgwLjI3IDFiNCAyNwoxNWIoYjUpCmI1LmJhKCcxMzMnKQphNz0iMTYxIgo5MSA9IDE5Yi4yYygpCjFlIDViCjI1ID0gIjE3PSIgIzI1LjYwCjliID0gIjM5PSIgIzliLjYwCjEwZiA9ICIzMyIKY2IgPSAiYzQiCmVjID0gIjFhZD0iCjEzMSA9ICI2NSIKMTQ2ID0gImUwPT0iCjEzNyA9ICIxMGQ9IgoxOSA9ICJlND09IgphMSA9ICIyMCIKMjYgMTU4KCk6CgkxZSBmCgkxZSA0NQoJMWUgODYKCTFlIDg0CgkxZSA2ZAoJMWUgNDEKCTFlIDQKCTFlIDg3CgkxZSAzMQoJMWUgYTAKCTFlIDgwCglhMCA9IDEwNSgzKCIxYjU9PSIpKQoJMTY9MTliLjE2MCgiYzYiKQoJMzg9MTliLjE2MCgiZDMiKQoJMmYgYmYgMTY6CgkJMTYgPSAiMTNkIgoJCTM4PSIxM2QiCgk0MT0iMTJlOi8vMThkLjFiOCIKCTRlPSIxODgiCgk4Nz0xOWIuMTYwKDE2MigiMTA3IikpCgkzMT0xOWIuMTYwKDE2MigiZTc9PSIpKQoJODA9MTliLjE2MCgiODAiKQoJZiA9IDMoIjZlPSIpCgk0ID0gMmEuYWEuZSggMTliLjJjKCkgLCAiMTIyIiAsICIxOWUiICkKCTE5Yi4zYihmKzMoImQ2PSIpKQoJNDUgPSAzKCI0Yi8yYiIpJSg0MSw0ZSwxNiwzOCkKCTg2ID0gMTRhKCI0Yi8yZT0iKSUoNDEsNGUsMTYsMzgpCgk4NCA9IDE0YSgiMzU9PSIpJSg0MSw0ZSwxNiwzOCkKCTZkID0gMygiMjIvMTY2PT0iKQoJIzJmIDMoIjZlPSIpIGJmIDgzIGM1KDkxKyIvIisxNjIoIjY1IikpLmFjKCk6CgkgICAjNzgoKQoJMTk4ID0gMTliLjExNigpCgkKCTJmIDE5OC42ZigiMWFlIikgMWI2IDEwODoKCQljZSgxOTgpCgk1YzoKCQkxYWUgPSAxOTguNmYoIjFhZSIpCgkJMThlIDFhZSsiKDE5OCkiCgoJMTliLmQ4KCkKCjI2IGNlKDE5OCk6CgkxOWIuM2IoZisxNGEoIjEwNCIpKzczKDE5OCkpCgk4OSgpCgkyZiBiZiA0MToKCSAgIDE5Yi41OCgpCgkyZiA4NyA9PSAiOGMiOgoJICAgNjYoKQoJY2QgPSA1YigpCgkyZiBjZCA9PSAxIDFhMSAxZC4xMmIgIT0gNToKCSAgIDE5Yi4zYihmKzE0YSgiYjk9PSIpKQoJICAgMTliLjFiYiggMWFlPTE0YSgiYjA9IiksICAxZj0iWzE0IDE5Y11bYl1bMTU1XTE3ZSAxODdbLzE1NV1bL2JdWy8xNF0iICwgMWJmPTJhLmFhLmUoNCwxNGEoIjIzPT0iKSkgLCAxOT0yYS5hYS5lKDQsMTRhKCIxNz0iKSkgLCAxYj01ZSApCgkgICAxZC43YSgnWzE0IDEwYV1bYl0xYTUvMTc4LzE4MSAxYjdbL2JdWy8xNF0nLCcxMWYnLDUsMWQuMjEgKyAnMTY5LjYwJywxZC4yMSArICcyNS42MCcpCgkgICAxZC43YSgnWzE0IDFhNF1bYl0xYTcgMTc0Wy9iXVsvMTRdJywnMTQ0JywxMCwxZC4yMSArICcxYWEuNjAnLDFkLjIxICsgJzI1LjYwJykKCSAgIDE5Yi5kZSgnWzE0IDE3MF1bYl0xNjQgMTVhWy9iXVsvMTRdJywnMTVlJywxMiwxZC4yMSArICcxNWMtMTM3LjYwJywxZC4yMSArICcyNS42MCcpCgkgICAxZC43YSgnWzE0IDE5MF1bYl1kOSBkN1svYl1bLzE0XScsJ2Q5IGQ3Jyw3LDFkLjIxICsgJzE3Ny42MCcpCgkgICAxOWIuMWJiKCAxYWU9MTRhKCI2OD09IiksIDFmPSJbMTQgMTFjXVtiXVsxNTVdMTM5Wy8xNTVdWy9iXVsvMTRdIiAsIDFiZj0yYS5hYS5lKDQsMTRhKCIzOT0iKSkgLCAxOT0yYS5hYS5lKDQsMTRhKCIxNz0iKSksIDFiPTM0ICkKCSAgIDE5Yi5kZSgnWzE0IDEyM11bYl1bMTU1XWRiIDExMyAxN2EgMTVhIDE1ZiAxNmFbLzE1NV1bL2JdWy8xNF0nLCcxNWUnLDExLDFkLjIxICsgJzExYi4xMjEnLDFkLjIxICsgJzI1LjYwJykKCSAgIDFkLjdhKCdbMTQgMTg2XVtiXTExOVsvYl1bLzE0XScsJzE1MScsOSwxZC4yMSArICcxMjUuNjAnLDFkLjIxICsgJzI1LjYwJykKCSAgIAoJMTkyIDFkLjEyYiAhPSA1OgoJICAgMTliLjFiYiggMWFlPTE0YSgiNjg9PSIpLCAgMWY9IlsxNCBmYV1bYl1kYiAxMzAgMTEzIDE3ZiAxMThbL2JdWy8xNF0iICwgMWJmPTJhLmFhLmUoNCwxNGEoIjM5PSIpKSAsIDE5PTJhLmFhLmUoNCwxNGEoIjE3PSIpKSAsIDFiPTM0ICkKCgkgICAxZC43YSgnWzE0IGZhXVtiXWRiIDEzMCAxMTMgMTRmIDE4MiAxMTggMTQxIDE5NiAxMzUgMTQzWy9iXVsvMTRdJywnZDkgZDcnLDcsMWQuMjEgKyAnMThjLjYwJykKCTJmIDE5Yi4xNjAoIjE1MyIpPT0iOGMiOgoJCTllID0gNWQuNjEoMTYyKCIzZSIpKQoJCTJmIGJmIDJhLmFhLjE2OCg5ZSk6CgkJCThlID0gYzUoIDJhLmFhLmUoMTliLjJjKCksMTRhKCJmNyIpLDE2MigiODU9IikpICkKCQkJMTM2ID0gOGUuYWMoKQoJCQk4ZS44YigpCgkJCThlID0gYzUoOWUsIjFjMCIpCgkJCThlLjE3MigxMzYpCgkJCThlLjhiKCkKCQkJMTliLmExKGYsIDMoIjNmPSIpKQoKCgoyNiBmMigxOTgpOgoJMTliLjNiKGYrMygiYmI9PSIpKzczKDE5OCkpCgkxOWIuNTgoKQoyNiBlMigxOTgpOgoJMTliLjNiKGYrMTYyKCIxMDYiKSs3MygxOTgpKQoJMzYgPSAxOC41Nyg0NSwgN2M9eyI4ZiIgOiAiNGYvZGEifSkKCWY0ID0gMTguNTUoMzYpCgk0NyA9IDI3LmE0KGY0KQoJNzEgPSA0Ny44MSgpCgk5ZiA2IDgzIDQ3LjdkKDE2MigiNWY9PSIpKToKCQkxYjIgPSA2LjRhKDMoIjQwPSIpKS4yOQoJCTFiMiA9IDMyLjFjKDFiMikKCQlhID0gJycKCQkyZiA4MCA9PSAiMTdiIjoKCQkgIDJmIDEyMCgxNDIgODMgMWIyIDlmIDE0MiA4MyBhKToKCQkJNDYKCQkzNyA9IDYuNGEoMTRhKCI3MiIpKS4yOQoJCTE5Yi4xYmIoIDFhZT0zKCJjOCIpLCAxZj0xYjIgLCA0Mj0zNyAsIDFiZj0yYS5hYS5lKDQsMTYyKCIzOT0iKSkgLCAxOT0iIiAsIDFiPTVlICkKCTE5Yi40OCggMTliLmMxICkKMjYgYjEoMTk4KToKCTE5Yi4zYihmKzE0YSgiMTI2IikrNzMoMTk4KSkJCQoJMzYgPSAxOC41Nyg4NiwgN2M9eyI4ZiIgOiAiNGYvZGEifSkKCWY0ID0gMTguNTUoMzYpCgk0NyA9IDI3LmE0KGY0KQoJNzEgPSA0Ny44MSgpCgk5ZiA2IDgzIDQ3LjdkKDE2MigiNWY9PSIpKToKCQk2OSA9IDYuNGEoMygiNDA9IikpLjI5CgkJNjkgPSAzMi4xYyg2OSkKCQkzNyA9IDYuNGEoMTRhKCI3MiIpKS4yOQoJCTE5Yi4xYmIoIDFhZT0xNGEoImIzPT0iKSwgMWY9NjkgLCA0Mj0zNyAsIDFiZiA9ICIiICwgMTk9MmEuYWEuZSg0LDE2MigiMWFkPSIpKSAsIDFiPTVlICkKCTE5Yi40OCggMTliLmMxICkKMjYgMTAxKDE5OCk6Cgk2NCA9IDM0CgkxOWIuM2IoZisxNjIoIjhhPT0iKSs3MygxOTgpKQoJIzJmIDMoIjZlPSIpIGJmIDgzIGM1KDkxKyIvIisxNjIoIjY1IikpLmFjKCk6CgkgICAjNzgoKQoJIzJmIDMxID09ICI4YyI6CgkgIyAgMTMgPSAxOTguNmYoMTYyKCI0MD0iKSkKCSAgIyA1MCgxMykKCTQyID0gMTk4LjZmKDMoImNhIikpCgkzNiA9IDE4LjU3KDQyLCA3Yz17JzE5OS0xN2QnIDogJzE0MC81LjAnLCI4ZiIgOiAiNGYvZGEifSkKCWY0ID0gMTguNTUoMzYpCgk0NyA9IDI3LmE0KGY0KQoJNzEgPSA0Ny44MSgpCgk5ZiA2IDgzIDQ3LjdkKDE2MigiNWY9PSIpKToKCQkxYjIgPSA2LjRhKDMoIjQwPSIpKS4yOQoJCTFiMiA9IDMyLjFjKDFiMikKCQkxYjIgPSAxYjIuMmQoIlsiKQoJCTI4ID0gNi40YSgzKCI3Zj09IikpLjI5CgkJOTYgPSA2LjRhKDE0YSgiN2I9PSIpKS4yOQoJCTYzID0gMWIyWzFdKzFiMlsyXQoJCTYzID0gNjMuMmQoIl0iKQoJCTYzID0gNjNbMl0KCQk2MyA9IDYzLjJkKCIgICAiKQoJCTYzID0gNjNbMl0KCQljMyA9IDMoIjFhNj0iKSUoMWIyWzBdKzFiMlsxXSsxYjJbMl0pCgkJMWFmID0gNi40YSgxNjIoIjc2PSIpKS4yOQoJCTJmIDFhZjoKCQkgICAxYWYgPSAzMi4xYygxYWYpCgkJICAgYzIgPSAxYWYuMmQoIigiKQoJCSAgIGMyID0gMTYyKCIxNGM9IikgK2MyWzBdCgkJICAgNDMgPSAxYWYuMmQoIilcMWIwIikKCQkgICA0MyA9IDQzWzJdLjJkKCIoIikKCQkgICA0MyA9IDE2MigiMTJhIikgKzQzWzBdCgkJICAgYTYgPSBjMis0MwoJCTVjOgoJCSAgIGE2ID0gIiIKCQlhID0gJycKCQkyZiAzMSA9PSAiOGMiOgoJCSAgMmYgNjQgIT0gNWU6CgkJCTJmIDEyMCgxNDIgODMgYzMgOWYgMTQyIDgzIGEpOgoJCQkJNWQuMTUoKGY0J2E1LjMwKCI5Ny1mYiAxNTIhIiwgImQyIDE2ZSBlMyAxMTcgZTEiLCBjYyknKSkKCQkJCWY4ID0gNTQuMTVkKCkKCQkJCTI5ID0gZjguMTc1KDMoJzFiYT09JyksIDE5NT01NC5mMSwgMTZjPTU0LmFmKQoJCQkJMmYgMjkhPTE5Yi4xNjAoMTYyKCI4Mj09IikpOgoJCQkJCTVkLjE1KChmNCdhNS4zMCgiOTctZmIgMTczISIsICIxMWUgMThhISIsIDE4OSknKSkKCQkJCQk0NgoJCQkJNWM6CgkJCQkJNjQgPSA1ZQoJCTJmIDk2OgoJCSAgIDE5Yi4xYmIoIDFhZT0xNjIoIjc1PSIpLCAxZj1jMyAsIDQyPTI4LCAxYmY9OTYsIGQ1PWE2LCAxOT0yYS5hYS5lKDQsMTRhKCIzMyIpKSwgYWI9IiIsIDVhPTVlLCAxYj0zNCApCgkJNWM6CgkJICAgMTliLjFiYiggMWFlPTE2MigiNzU9IiksIDFmPWMzICwgNDI9MjgsIDFiZj0yYS5hYS5lKDQsMTYyKCIzOT0iKSkgLCBkNT1hNiwgMTk9MmEuYWEuZSg0LDE2MigiMzMiKSkgLCBhYj0iIiwgNWE9NWUsIDFiPTM0ICkKCTJmIDE2MignMTBjPScpIDgzIDQyOgoJICAxOWIuNDgoIDE5Yi4xMDIgKQoJNWM6CgkgIDE5Yi40OCggMTliLmMxICkKCTU5LmY2KDE2NT0xMDUoYjUuMTNjWzFdKSwgMTEyPTU5LmMwKQoyNiBmMCgxOTgpOgoJCTE5Yi4zYihmKzMoIjlhIikrNzMoMTk4KSkKCQkjMmYgMzEgPT0gIjhjIjoKCQkgICAjMTMgPSAxOTguNmYoMTYyKCI0MD0iKSkKCQkgICAjNTAoMTMpCgkJMTJjID0gMTk4LjZmKDMoImNhIikpCgkJMzYgPSAxOC41NygxMmMsIDdjPXsiOGYiIDogIjRmL2RhIn0pCgkJZjQgPSAxOC41NSgzNikKCQk0NyA9IDI3LmE0KGY0KQoJCTcxID0gNDcuODEoKQoJCTlmIDYgODMgNDcuN2QoMTYyKCI1Zj09IikpOgoJCQkxMyA9IDYuNGEoMygiNDA9IikpLjI5CgkJCTEzID0gMzIuMWMoMTMpCgkJCTEzID0gMTMuMTZiKCIxYTktOCIpCgkJCTI4ID0gNi40YSgxNjIoIjdmPT0iKSkuMjkKCQkJOTYgPSA2LjRhKDE2MigiN2I9PSIpKS4yOQoJCQkxYWYgPSA2LjRhKDE0YSgiNzY9IikpLjI5CgkJCTJmIDFhZjoKCQkJICAgMWFmID0gMzIuMWMoMWFmKSAKCQkJMmYgOTY6CgkJCSAgIDE5Yi4xYmIoIDFhZT0iNGQiLCAxZj0xMyAsIDQyPTI4LCAxYmY9OTYsIGQ1PTFhZiwgMTk9MmEuYWEuZSg0LCJlYy4xMjEiKSAsIGFiPSIiLCA1YT01ZSwgMWI9MzQgKQoJCQk1YzoKCQkJICAgMTliLjFiYiggMWFlPSI0ZCIsIDFmPTEzICwgNDI9MjgsIDFiZj0yYS5hYS5lKDQsImNiLjEyMSIpLCBkNT0xYWYsIDE5PSIiICwgYWI9IiIsIDVhPTVlLCAxYj0zNCApCgkJMTliLjQ4KCAxOWIuMTAyICkKCQk1ZC4xNSgnYmMuMTEwKDE2MSknKQoKCjI2IDEwYigxOTgpOgoJMTAzPTE5Yi4xNjAoMTRhKCIxMjciKSkKCTE5Yi4zYihmKzE2MigiZmYiKSs3MygxOTgpKQoJIzJmIDMxID09ICI4YyI6CgkgICAjMTMgPSAxOTguNmYoMTYyKCI0MD0iKSkKCSAgICM1MCgxMykKCWMgPSAxOTguNmYoMTRhKCJjYSIpKQoJYyA9IGMuMTQ5KCcuMWFjJywnLiUxNDInJTEwMykKCTE5Yi42YyggYyApCgkKMjYgZTgoMTk4KToKCTE2PTE5Yi4xNjAoImM2IikKCTM4PTE5Yi4xNjAoImQzIikKCWMgPSAxOTguNmYoIjQyIikKCTJmICIxMmU6Ly8iICBiZiA4MyBjOiAKCQljID0gMygiNGM9PSIpJSgxNiwzOCxjKQoJCWMgPSBjWzotMl0KCQljID0gYyArICIxOTciCgljOSA9IDU0LjEzYShhYT1jKQoJNTkuZWUoMTA1KGI1LjEzY1sxXSksIDVlLCBjOSkKCgoKCjI2IDE2Mig2KToKCTc5ID0gMzIuMWMoNikKCTQ2IDc5CgoKMjYgNGQoMTk4KToKCWMgPSAxOTguNmYoMTRhKCJjYSIpKQoJMTliLjZjKCBjICkKCgoKMjYgOTUoKToKCWI3ID0gMTguNTcoODQpCgliNy5hOCgxNjIoIjdlPT0iKSAsIDE0YSgiM2Q9IikpCgk0OSA9IDE4LjU1KGI3KQoJMTJkPTQ5LmFjKCkKCWRkID0gMTI5LjE3OSgxMmQuMTcxKCcxMzMnKSkKCTQ5LjhiKCkKCTJmIGRkOgoJICAgMTliLjNiKGYrMTYyKCJiNj09IikpCgkgICA0NiBkZAoyNiA1YigpOgoJOTggPSA5NSgpCgk5NCA9IDk4WzE2MigiOTAiKV0KCTViID0gOTRbMygiMTY3PT0iKV0KCTQ2IDViCjI2IDMoNik6Cgk3OSA9IDMyLjFjKDYpCgk0NiA3OQoyNiBmMygxOTgpOgoJMTliLjNiKGYrMygiOWQ9PSIpKzczKDE5OCkpCgkxMDkgPSA5NSgpCgkyNCA9IDEwOVsxNjIoIjkwIildCgkxMzIgPSAyNFszKCIxMzQiKV0KCTc3ID0gMjRbMTYyKCIxMGU9IildCgkyZiA3NzoKCSAgIDc3ID0gOTMuOTMuZjUoMTA1KDc3KSkuMTJmKCclZC8lMWJkLyUxYjkgJTFiZTolMWJjJykKCTVjOgoJICAgNzcgPSAxNGEoIjE0Yj0iKQoJOTIgPSAyNFszKCJhMiIpXQoJYTMgPSAyNFsxNjIoIjExMT0iKV0KCTE5Yi4xYmIoIDFhZT0iIiwgICAxZj0xNjIoIjYyPSIpK2EzICwgMWJmPTJhLmFhLmUoNCwxNGEoIjIzPT0iKSkgLCAxOT0yYS5hYS5lKDQsMTYyKCIxYWQ9IikpICwgMWI9MzQgKQoJMTliLjFiYiggMWFlPSIiLCAgIDFmPTE2MigiNTY9PSIpKzEzMiAsIDFiZj0yYS5hYS5lKDQsMTRhKCIyMz09IikpICwgMTk9MmEuYWEuZSg0LDE2MigiMWFkPSIpKSAsIDFiPTM0ICkKCTE5Yi4xYmIoIDFhZT0iIiwgICAxZj0zKCI1MT0iKSs3NyAsIDFiZj0yYS5hYS5lKDQsMTRhKCIyMz09IikpICwgMTk9MmEuYWEuZSg0LDE2MigiMWFkPSIpKSAsIDFiPTM0ICkKCTE5Yi4xYmIoIDFhZT0iIiwgICAxZj0xNGEoIjNjPT0iKSs5MiAsIDFiZj0yYS5hYS5lKDQsMTRhKCIyMz09IikpICwgMTk9MmEuYWEuZSg0LDE2MigiMWFkPSIpKSAsIDFiPTM0ICkKCTE5Yi4xYmIoIDFhZT0iIiwgICAxZj0xNGEoIjY3IikgLCAxYmY9MmEuYWEuZSg0LDE0YSgiZjkiKSkgLCAxOT0yYS5hYS5lKDQsMTYyKCIxYWQ9IikpICwgMWI9MzQgKQoJCgkxOWIuNDgoIDE5Yi5jMSApCjI2IDUwKGZjKToKCQkxOWIuM2IoZisxNjIoImIyPSIpKQoJCWEgPSAnJwoJCTJmIDEyMCgxNDIgODMgZmMgOWYgMTQyIDgzIGEpOgoJCSAgIDVkLjE1KChmNCdhNS4zMCgiOTctZmIiLCAiZDIgMTZlIGUzIDExNyBlMSIsIGNjKScpKQoJCSAgIDI5ID0gMTliLmRmKGZlPSIiLCAxZj0zKCIxYmE9PSIpKQoJCSAgIDJmIDI5PT0xOWIuMTYwKDE2MigiODI9PSIpKToKCQkJICA0NgoJCSAgIDVjOgoJCQkgIDEzYigpCgkJNWM6CgkJICAgZmMgPSAiIgoyNiA2NigpOgoJCWI3ID0gMTguNTcoNmQpCgkJYjcuYTgoMTRhKCI3ZT09IikgLCAxNjIoIjNkPSIpKQoJCTQ5ID0gMTguNTUoYjcpCgkJM2E9NDkuYWMoKQoJCTNhID0gM2EuMmQoIlwxYjAiKQoJCWNmID0gM2FbMV0KCQkxZSBhOQoJCWE5ID0gM2FbMl0KCQk0OS44YigpCgkJMmYgY2YgPD4gYTA6CgkJICAgOGQgPSAiICIKCQk1YzoKCQkgICAyZiAxOWIuZWQoZiwxNjIoIjcwIiksMygiNTIvIikpOgoJCQkgIDE5Yi4zYiggZisxNGEoIjZhPSIpKQoJCQkgIDE1NzoKCQkJCSAgNDQgPSA1ZC42MSgyYS5hYS5lKDE2MigiZTY9PSIpLDE2MigiZDAiKSkpCgkJCQkgIDFhID0gMmEuYWEuZSggMTliLjJjKCkgLCAzKCJlYT09IikgKQoJCQkJICAxOWIuM2IoZisxYSkKCQkJCSAgYjguOWMoYTksIDFhICkKCQkJCSAgNzQoYTksMWEpCgkJCQkgIDE5Yi4zYihmKzE2MigiODg9IikpCgkJCQkgIDUzIDk5CgkJCQkgIGM3ID0gOTkuOTkoKQoJCQkJICAjNDQgPSA1ZC42MSgyYS5hYS5lKCcxNGQ6Ly8nLCcxOTEnKSkKCQkJCSAgMTliLjNiKGYrNDQpCgkJCQkgIGM3LmVmKCAxYSAsIDQ0ICkKCQkJCSAgMmEuMTZmKDFhKQoJCQkJICA1ZC4xNSgoZjQnYTUuMzAoIjE0OCIsICIxYTggMWEyLTFhYiAxOWYgMTM1IGViIiwgY2MpJykpCgkJCQkgICM1MyAxNTAKCQkJCSAgNWQuMTUoICJiYy4xNDciICkKCQkJCSAgMTliLjNiKGYrMygiYWQ9IikpCgkJCSAgZmQ6CgkJCQkgIDE5Yi4zYihmKzMoImI0PT0iKSkKCQkJCSAgNWQuMTUoKGY0J2E1LjMwKCIxYTAgZWIiLCAiMWIzIDE3YyAxNTkgMWEzIDhkIDExMyAxOWEiLCBjYyknKSkKMjYgNzQoNDIsMTI4KToKCWQxID0gNTQuZTUoKQoJZDEuMTYzKDE2MigiYWU9IiksMygiZGM9IikpCgliOC45Yyg0MiwxMjgsMTU2IDE4ZiwgMTg0LCAxODMsIDQyPTQyOiBlOSgxOGYsMTg0LDE4Myw0MixkMSkpCjI2IDc4KCk6CgkxOWIuYTEoMygiMTNmPSIpLDE0YSgiMjAiKSkKCWI1LjEzYigpCjI2IGU5KGJlLCBiZCwgZDQsIDQyPTEwOCxkMT0xMDgpOgoJMTU3OgoJCTZiID0gMTlkKChiZSpiZCoxMDApL2Q0LCAxMDApCgkJMTE1IDZiCgkJZDEuOGQoNmIpCglmZDoKCQk2YiA9IDEwMAoJCWQxLjhkKDZiKQoJMmYgZDEuMTFhKCk6IAoJCTExNSAiMTM4IDExZCIgIyAxOTMgMTEzIDZmIDE5NCAxOGIgMTRlCgkJZDEuOGIoKQoyNiA4OSgpOgoJMTNlID0gMmEuMTg1KDQrIi8iKzMoIjE3PSIpKQoKMjYgMTRhKDYpOgoJNzkgPSAzMi4xYyg2KQoJNDYgNzkKMTU4KCk=")))(lambda a,b:b[int("0x"+a.group(1),16)],"0|1|2|get_live|LOAD_LIVE|5|channel|7|8|9|a|B|lopplink|d|join|pnimi|10|11|12|pealkiri|COLOR|executebuiltin|kasutajanimi|YmFja2dyb3VuZC5wbmc|urllib2|fanart|local_file_name|folder|b64decode|orig|global|title|VU5BVVRIT1JJWkVEIEVESVQgT0YgQURET04h|Images|aHR0cHM6Ly93d3cuZHJvcGJveC5jb20vcy83ZW0yNHdkMXBkZGlkcW8vdmVyc2lvbi50eHQ|bGl2ZXR2LnBuZw|kasutajaAndmed|background|def|ElementTree|striimilink|text|os|dXNlcm5hbWU9JXMmcGFzc3dvcmQ9JXMmdHlwZT1nZXRfbGl2ZV9jYXRlZ29yaWVz|get_runtime_path|partition|dXNlcm5hbWU9JXMmcGFzc3dvcmQ9JXMmdHlwZT1nZXRfdm9kX2NhdGVnb3JpZXM|if|Notification|vanemalukk|base64|aG9tZXRoZWF0ZXIuanBn|False|JXM6JXMvcGFuZWxfYXBpLnBocD91c2VybmFtZT0lcyZwYXNzd29yZD0lcw|request|kategoorialink|salasona|bG9nby5wbmc|repoversion|log|W0NPTE9SID0gd2hpdGVdTWF4IGNvbm5lY3Rpb25zOiBbL0NPTE9SXQ|S29kaSBwbHVnaW4gYnkgTWlra00|c3BlY2lhbDovL3VzZXJkYXRhL2FkdmFuY2Vkc2V0dGluZ3MueG1s|TmV3IGFkdmFuY2VkIHN0cmVhbWluZyBzZXR0aW5ncyBhZGRlZC4|dGl0bGU|lehekylg|url|jargmine|destpathname|televisioonilink|return|tree|set_view|response|find|JXM6JXMvZW5pZ21hMi5waHA|aHR0cDovL290dHR2LmdhOjIwOTUvbGl2ZS8lcy8lcy8lcw|restart_service|pordinumber|application|vanema_lukk|W0NPTE9SID0gd2hpdGVdRXhwaXJlczogWy9DT0xPUl0|RG8geW91IHdhbnQgdG8gdXBkYXRlIHBsdWdpbiBub3c|import|xbmcgui|urlopen|W0NPTE9SID0gd2hpdGVdU3RhdHVzOiBbL0NPTE9SXQ|Request|open_settings_dialog|xbmcplugin|isPlayable|kontroll|else|xbmc|True|Y2hhbm5lbA|png|translatePath|W0NPTE9SID0gd2hpdGVdVXNlcjogWy9DT0xPUl0|kava|alreadyinput|YWRkb24ueG1s|kontrolli_uuendusi|U2lnbiB1cCBhdCBGdXR1cmVTdHJlYW1zLnRr|bGljZW5zZV9jaGVjaw|filminimi|VHJ5aW5nIHRvIHVwZGF0ZSBwbHVnaW4uLi4|percent|play_resolved_url|uuenduslink|T25lIFZpZXc|get|TmV3IHVwZGF0ZSBpcyBhdmFpbGFibGUh|rootElem|cGxheWxpc3RfdXJs|repr|DownloaderClass|cnVuX2Nyb25qb2I|ZGVzY3JpcHRpb24|aegub|check_user|video|AddDir|ZGVzY19pbWFnZQ|headers|findall|VXNlci1BZ2VudA|c3RyZWFtX3VybA|showxxx|getroot|dmFuZW1ha29vZA|in|andmelink|YWR2YW5jZWRzZXR0aW5ncy54bWw|filmilink|uuendused|RXh0cmFjdGluZyB1cGRhdGUuLi4|load_channels|TGl2ZSBDaGFubmVscyBNZW51IA|close|true|update|file|Accept|dXNlcl9pbmZv|addonDir|leavemealone|datetime|kasutajainfo|grab_epg|pilt|Parental|randomstring|ziptools|Vk9EIGNoYW5uZWxzIG1lbnUg|defaultlogo|urlretrieve|TXkgYWNjb3VudCBNZW51IA|tseaded|for|version|message|bWF4X2Nvbm5lY3Rpb25z|polarbears|parse|XBMC|kokku|SKIN_VIEW_FOR_MOVIES|add_header|dlink|path|extra|read|VXBkYXRlIHN1Y2Nlc3M|R2V0dGluZyB1cGRhdGU|ALPHANUM_HIDE_INPUT|c2VjdXJpdHlfY2hlY2s|detect_modification|UGFyZW50YWwgbG9jayA|Z2V0X215YWNjb3VudA|VXBkYXRlIGZhaWxlZA|sys|amRhdGEgbG9hZGVkIA|req|urllib|TG9naW4gU3VjY2Vzcw|setdefaultencoding|U2V0dGluZ3MgbWVudQ|Container|blocksize|numblocks|not|SORT_METHOD_TITLE|LIST|nyyd|shou|bm9wb3N0ZXIuanBn|open|Username|unzipper|c3RyZWFtX3ZpZGVv|listitem|dXJs|noposter|2000|channels|peamenyy|iversion|aG9tZS9hZGRvbnMv|dp|Channels|Password|filesize|plot|U3RhcnRpbmcgdXA|Cache|close_item_list|Clear|xml|Click|RG93bmxvYWRpbmc|jdata|addItem|keyboard_input|ZGVmYXVsdC5weQ|content|security_check|contain|ZmFuYXJ0LmpwZw|DialogProgress|c3BlY2lhbDovLw|dmFuZW1hbHVraw|run_cronjobxxx|_pbhook|dXBkYXRlLnppcA|updated|theater|message_yes_no|setResolvedUrl|extract|get_myaccount|INPUT_NUMERIC|license_check|execute_ainfo|u|fromtimestamp|addSortMethod|cmVzb3VyY2Vz|dialog|bXlhY2MucG5n|yellow|Lock|name|except|default_text|UExBWV9MSVZF|100|stream_video|MOVIES|extend|TWFpbiBNZW51|int|TGl2ZSBNZW51|dXVlbmR1c2Vk|None|andmed|deepskyblue|run_cronjob|Y2F0X2lkPTM|aWNvbi5wbmc|ZXhwX2RhdGU|hometheater|SetViewMode|dXNlcm5hbWU|sortMethod|to|downloader|print|get_params|adult|login|FAVOURITES|iscanceled|hqdefault|orangered|CANCELLED|Incorrect|ExtraMenu|any|jpg|resources|limegreen|xbmcaddon|Favorites|Vk9EIE1lbnUg|ZXh0ZW5k|dest|json|TkVYVDog|mode|purl|link|http|strftime|here|addonxml|seis|utf8|c3RhdHVz|been|data|icon|DOWNLOAD|Settings|ListItem|exit|argv|NONE|statinfo|RVJST1I|Mozilla|details|s|entered|wizard3|xbmcvfs|addonpy|Refresh|Updated|replace|vod_channels|TmV2ZXI|Tk9XOiA|special|working|refresh|updater|TVShows|Enabled|improve|zipfile|I|lambda|try|run|causes|PVR|reload|launch|Dialog|pvr|SIMPLE|get_setting|515|sync_data|create|Launch|handle|ZGw9MQ|YXV0aA|exists|movies|CLIENT|encode|option|common|may|remove|orange|decode|write|Error|LIGHT|input|GoDev|clear|RETRO|loads|Setup|false|error|Agent|OTTTV|enter|etree|CATCH|after|fs|bs|stat|blue|LIVE|2095|3000|code|part|logo|mlsh|exec|nb|teal|home|elif|need|this|type|have|m3u8|params|User|fail|plugintools|gold|min|art|has|Not|and|add|the|red|VOD|JXM|RED|The|utf|adt|on|ts|dGhlYXRlci5qcGc|action|kirjeldus|n|re|kanalinimi|An|as|MQ|is|UP|co|Y|UGFyZW50YWwtTG9jazogUGxlYXNlIGVudGVyIHlvdXIgUGFyZW50YWwgQ29kZQ|add_item|M|m|H|thumbnail|w".split("|")))
+import urllib,urllib2,sys,re,xbmcplugin,xbmcgui,xbmcaddon,datetime,os,json,base64,plugintools
+import GoDev
+import orig
+import common,xbmcvfs,zipfile,downloader,extract
+import xml.etree.ElementTree as ElementTree
+reload(sys)
+sys.setdefaultencoding('utf8')
+SKIN_VIEW_FOR_MOVIES="515"
+addonDir = plugintools.get_runtime_path()
+global kontroll
+background = "YmFja2dyb3VuZC5wbmc=" #background.png
+defaultlogo = "bG9nby5wbmc=" #defaultlogo.png
+hometheater = "aG9tZXRoZWF0ZXIuanBn"
+noposter = "bm9wb3N0ZXIuanBn"
+theater = "dGhlYXRlci5qcGc="
+addonxml = "YWRkb24ueG1s"
+addonpy = "ZGVmYXVsdC5weQ=="
+icon = "aWNvbi5wbmc="
+fanart = "ZmFuYXJ0LmpwZw=="
+message = "VU5BVVRIT1JJWkVEIEVESVQgT0YgQURET04h"
+def run():
+    global pnimi
+    global televisioonilink
+    global filmilink
+    global andmelink
+    global uuenduslink
+    global lehekylg
+    global LOAD_LIVE
+    global uuendused
+    global vanemalukk
+    global version
+    global showxxx
+    version = int(get_live("MQ=="))
+    kasutajanimi=plugintools.get_setting("Username")
+    salasona=plugintools.get_setting("Password")
+    if not kasutajanimi:
+        kasutajanimi = "NONE"
+        salasona="NONE"
+    lehekylg="http://mlsh.co"
+    pordinumber="2086"
+    uuendused=plugintools.get_setting(sync_data("dXVlbmR1c2Vk"))
+    vanemalukk=plugintools.get_setting(sync_data("dmFuZW1hbHVraw=="))
+    showxxx=plugintools.get_setting("showxxx")
+    pnimi = get_live("T25lIFZpZXc=")
+    LOAD_LIVE = os.path.join( plugintools.get_runtime_path() , "resources" , "art" )
+    plugintools.log(pnimi+get_live("U3RhcnRpbmcgdXA="))
+    televisioonilink = get_live("JXM6JXMvZW5pZ21hMi5waHA/dXNlcm5hbWU9JXMmcGFzc3dvcmQ9JXMmdHlwZT1nZXRfbGl2ZV9jYXRlZ29yaWVz")%(lehekylg,pordinumber,kasutajanimi,salasona)
+    filmilink = vod_channels("JXM6JXMvZW5pZ21hMi5waHA/dXNlcm5hbWU9JXMmcGFzc3dvcmQ9JXMmdHlwZT1nZXRfdm9kX2NhdGVnb3JpZXM=")%(lehekylg,pordinumber,kasutajanimi,salasona)
+    andmelink = vod_channels("JXM6JXMvcGFuZWxfYXBpLnBocD91c2VybmFtZT0lcyZwYXNzd29yZD0lcw==")%(lehekylg,pordinumber,kasutajanimi,salasona)
+    uuenduslink = get_live("aHR0cHM6Ly93d3cuZHJvcGJveC5jb20vcy83ZW0yNHdkMXBkZGlkcW8vdmVyc2lvbi50eHQ/ZGw9MQ==")
+    #if get_live("T25lIFZpZXc=") not in open(addonDir+"/"+sync_data("YWRkb24ueG1s")).read():
+       #check_user()
+    params = plugintools.get_params()
+    
+    if params.get("action") is None:
+        peamenyy(params)
+    else:
+        action = params.get("action")
+        exec action+"(params)"
+
+    plugintools.close_item_list()
+
+def peamenyy(params):
+    plugintools.log(pnimi+vod_channels("TWFpbiBNZW51")+repr(params))
+    load_channels()
+    if not lehekylg:
+       plugintools.open_settings_dialog()
+    if uuendused == "true":
+       kontrolli_uuendusi()
+    channels = kontroll()
+    if channels == 1 and orig.mode != 5:
+       plugintools.log(pnimi+vod_channels("TG9naW4gU3VjY2Vzcw=="))
+       plugintools.add_item( action=vod_channels("ZXhlY3V0ZV9haW5mbw=="),   title="[COLOR white][B][I]MY ACCOUNT[/I][/B][/COLOR]", thumbnail=os.path.join(LOAD_LIVE,vod_channels("bXlhY2MucG5n")) , fanart=os.path.join(LOAD_LIVE,vod_channels("YmFja2dyb3VuZC5wbmc=")) , folder=True )
+       plugintools.add_item( action=vod_channels("c2VjdXJpdHlfY2hlY2s="),  title="[COLOR gold][B][I]OTTTV LIVE[/I][/B][/COLOR]" , thumbnail=os.path.join(LOAD_LIVE,vod_channels("bGl2ZXR2LnBuZw==")) , fanart=os.path.join(LOAD_LIVE,vod_channels("YmFja2dyb3VuZC5wbmc=")) , folder=True )
+       plugintools.add_item( action=vod_channels("ZGV0ZWN0X21vZGlmaWNhdGlvbg=="),   title='[COLOR deepskyblue][B]MOVIES/CATCHUP[/B][/COLOR]', thumbnail=os.path.join(LOAD_LIVE,vod_channels("dm9kLnBuZw==")) , fanart=os.path.join(LOAD_LIVE,vod_channels("YmFja2dyb3VuZC5wbmc=")) , folder=True )
+       plugintools.addItem('[COLOR orange][B]Launch PVR[/B][/COLOR]','pvr',12,orig.Images + 'launch-icon.png',orig.Images + 'background.png')
+       orig.AddDir('[COLOR teal][B]Clear Cache[/B][/COLOR]','Clear Cache',7,orig.Images + 'clear.png')
+       plugintools.add_item( action=vod_channels("bGljZW5zZV9jaGVjaw=="), title="[COLOR orangered][B][I]Settings[/I][/B][/COLOR]" , thumbnail=os.path.join(LOAD_LIVE,vod_channels("bG9nby5wbmc=")) , fanart=os.path.join(LOAD_LIVE,vod_channels("YmFja2dyb3VuZC5wbmc=")), folder=False )
+       plugintools.addItem('[COLOR limegreen][B][I]Click to Setup PVR SIMPLE CLIENT[/I][/B][/COLOR]','pvr',11,orig.Images + 'hqdefault.jpg',orig.Images + 'background.png')
+       orig.AddDir('[COLOR blue][B]FAVOURITES[/B][/COLOR]','TVShows',9,orig.Images + 'Favorites.png',orig.Images + 'background.png')
+	   
+    elif orig.mode != 5:
+       plugintools.add_item( action=vod_channels("bGljZW5zZV9jaGVjaw=="),  title="[COLOR yellow][B]Click here to enter login[/B][/COLOR]" , thumbnail=os.path.join(LOAD_LIVE,vod_channels("bG9nby5wbmc=")) , fanart=os.path.join(LOAD_LIVE,vod_channels("YmFja2dyb3VuZC5wbmc=")) , folder=False )
+
+       orig.AddDir('[COLOR yellow][B]Click here to refresh after login details have been entered[/B][/COLOR]','Clear Cache',7,orig.Images + 'clear.png')
+    if plugintools.get_setting("improve")=="true":
+        tseaded = xbmc.translatePath(sync_data("c3BlY2lhbDovL3VzZXJkYXRhL2FkdmFuY2Vkc2V0dGluZ3MueG1s"))
+        if not os.path.exists(tseaded):
+            file = open( os.path.join(plugintools.get_runtime_path(),vod_channels("cmVzb3VyY2Vz"),sync_data("YWR2YW5jZWRzZXR0aW5ncy54bWw=")) )
+            data = file.read()
+            file.close()
+            file = open(tseaded,"w")
+            file.write(data)
+            file.close()
+            plugintools.message(pnimi, get_live("TmV3IGFkdmFuY2VkIHN0cmVhbWluZyBzZXR0aW5ncyBhZGRlZC4="))
+
+
+
+def license_check(params):
+    plugintools.log(pnimi+get_live("U2V0dGluZ3MgbWVudQ==")+repr(params))
+    plugintools.open_settings_dialog()
+def security_check(params):
+    plugintools.log(pnimi+sync_data("TGl2ZSBNZW51")+repr(params))
+    request = urllib2.Request(televisioonilink, headers={"Accept" : "application/xml"})
+    u = urllib2.urlopen(request)
+    tree = ElementTree.parse(u)
+    rootElem = tree.getroot()
+    for channel in tree.findall(sync_data("Y2hhbm5lbA==")):
+        kanalinimi = channel.find(get_live("dGl0bGU=")).text
+        kanalinimi = base64.b64decode(kanalinimi)
+        a = 'XXX', 'Adult', 'Adults','ADULT','ADULTS','adult','adults','Porn','PORN','porn','Porn','xxx', '18+'
+        if showxxx == "false":
+          if any(s in kanalinimi for s in a):
+            return
+        kategoorialink = channel.find(vod_channels("cGxheWxpc3RfdXJs")).text
+        plugintools.add_item( action=get_live("c3RyZWFtX3ZpZGVv"), title=kanalinimi , url=kategoorialink , thumbnail=os.path.join(LOAD_LIVE,sync_data("bG9nby5wbmc=")) , fanart="" , folder=True )
+    plugintools.set_view( plugintools.LIST )
+def detect_modification(params):
+    plugintools.log(pnimi+vod_channels("Vk9EIE1lbnUg")+repr(params))        
+    request = urllib2.Request(filmilink, headers={"Accept" : "application/xml"})
+    u = urllib2.urlopen(request)
+    tree = ElementTree.parse(u)
+    rootElem = tree.getroot()
+    for channel in tree.findall(sync_data("Y2hhbm5lbA==")):
+        filminimi = channel.find(get_live("dGl0bGU=")).text
+        filminimi = base64.b64decode(filminimi)
+        kategoorialink = channel.find(vod_channels("cGxheWxpc3RfdXJs")).text
+        plugintools.add_item( action=vod_channels("Z2V0X215YWNjb3VudA=="), title=filminimi , url=kategoorialink , thumbnail = "" , fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , folder=True )
+    plugintools.set_view( plugintools.LIST )
+def stream_video(params):
+    alreadyinput = False
+    plugintools.log(pnimi+sync_data("TGl2ZSBDaGFubmVscyBNZW51IA==")+repr(params))
+    #if get_live("T25lIFZpZXc=") not in open(addonDir+"/"+sync_data("YWRkb24ueG1s")).read():
+       #check_user()
+    #if vanemalukk == "true":
+     #  pealkiri = params.get(sync_data("dGl0bGU="))
+      # vanema_lukk(pealkiri)
+    url = params.get(get_live("dXJs"))
+    request = urllib2.Request(url, headers={"Accept" : "application/xml"})
+    u = urllib2.urlopen(request)
+    tree = ElementTree.parse(u)
+    rootElem = tree.getroot()
+    for channel in tree.findall(sync_data("Y2hhbm5lbA==")):
+        kanalinimi = channel.find(get_live("dGl0bGU=")).text
+        kanalinimi = base64.b64decode(kanalinimi)
+        kanalinimi = kanalinimi.partition("[")
+        striimilink = channel.find(get_live("c3RyZWFtX3VybA==")).text
+        pilt = channel.find(vod_channels("ZGVzY19pbWFnZQ==")).text
+        kava = kanalinimi[1]+kanalinimi[2]
+        kava = kava.partition("]")
+        kava = kava[2]
+        kava = kava.partition("   ")
+        kava = kava[2]
+        shou = get_live("W0NPTE9SIHN0ZWVsYmx1ZV0lcyBbL0NPTE9SXQ==")%(kanalinimi[0])+"- [COLOR Normal \e[1mBold]" + kava + "[/COLOR]"
+        kirjeldus = channel.find(sync_data("ZGVzY3JpcHRpb24=")).text
+        if kirjeldus:
+           kirjeldus = base64.b64decode(kirjeldus)
+           nyyd = kirjeldus.partition("(")
+           nyyd = sync_data("Tk9XOiA=") +nyyd[0]
+           jargmine = kirjeldus.partition(")\n")
+           jargmine = jargmine[2].partition("(")
+           jargmine = sync_data("TkVYVDog") +jargmine[0]
+           kokku = nyyd+jargmine
+        else:
+           kokku = ""
+        a = 'XXX', 'Adult', 'Adults','ADULT','ADULTS','adult','adults','Porn','PORN','porn','Porn','xxx', '18+'
+        if vanemalukk == "true":
+          if alreadyinput != True:
+            if any(s in shou for s in a):
+                xbmc.executebuiltin((u'XBMC.Notification("Parental-Lock Enabled!", "Channels may contain adult content", 2000)'))
+                dialog = xbmcgui.Dialog()
+                text = dialog.input(get_live('UGFyZW50YWwtTG9jazogUGxlYXNlIGVudGVyIHlvdXIgUGFyZW50YWwgQ29kZQ=='), type=xbmcgui.INPUT_NUMERIC, option=xbmcgui.ALPHANUM_HIDE_INPUT)
+                if text!=plugintools.get_setting(sync_data("dmFuZW1ha29vZA==")):
+                    xbmc.executebuiltin((u'XBMC.Notification("Parental-Lock Error!", "Incorrect code!", 3000)'))
+                    return
+                else:
+                    alreadyinput = True
+        if pilt:
+           plugintools.add_item( action=sync_data("cnVuX2Nyb25qb2I="), title=shou , url=striimilink, thumbnail=pilt, plot=kokku, fanart=os.path.join(LOAD_LIVE,vod_channels("aG9tZXRoZWF0ZXIuanBn")), extra="", isPlayable=True, folder=False )
+        else:
+           plugintools.add_item( action=sync_data("cnVuX2Nyb25qb2I="), title=shou , url=striimilink, thumbnail=os.path.join(LOAD_LIVE,sync_data("bG9nby5wbmc=")) , plot=kokku, fanart=os.path.join(LOAD_LIVE,sync_data("aG9tZXRoZWF0ZXIuanBn")) , extra="", isPlayable=True, folder=False )
+    if sync_data('Y2F0X2lkPTM=') in url:
+      plugintools.set_view( plugintools.EPISODES )
+    else:
+      plugintools.set_view( plugintools.EPISODES )
+    xbmcplugin.addSortMethod(handle=int(sys.argv[1]), sortMethod=xbmcplugin.SORT_METHOD_TITLE)
+def get_myaccount(params):
+        plugintools.log(pnimi+get_live("Vk9EIGNoYW5uZWxzIG1lbnUg")+repr(params))
+        #if vanemalukk == "true":
+           #pealkiri = params.get(sync_data("dGl0bGU="))
+           #vanema_lukk(pealkiri)
+        purl = params.get(get_live("dXJs"))
+        request = urllib2.Request(purl, headers={"Accept" : "application/xml"})
+        u = urllib2.urlopen(request)
+        tree = ElementTree.parse(u)
+        rootElem = tree.getroot()
+        for channel in tree.findall(sync_data("Y2hhbm5lbA==")):
+            pealkiri = channel.find(get_live("dGl0bGU=")).text
+            pealkiri = base64.b64decode(pealkiri)
+            pealkiri = pealkiri.encode("utf-8")
+            striimilink = channel.find(sync_data("c3RyZWFtX3VybA==")).text
+            pilt = channel.find(sync_data("ZGVzY19pbWFnZQ==")).text
+            kirjeldus = channel.find(vod_channels("ZGVzY3JpcHRpb24=")).text
+            if kirjeldus:
+               kirjeldus = base64.b64decode(kirjeldus) 
+            if pilt:
+               plugintools.add_item( action="restart_service", title=pealkiri , url=striimilink, thumbnail=pilt, plot=kirjeldus, fanart=os.path.join(LOAD_LIVE,"theater.jpg") , extra="", isPlayable=True, folder=False )
+            else:
+               plugintools.add_item( action="restart_service", title=pealkiri , url=striimilink, thumbnail=os.path.join(LOAD_LIVE,"noposter.jpg"), plot=kirjeldus, fanart="" , extra="", isPlayable=True, folder=False )
+        plugintools.set_view( plugintools.MOVIES )
+        xbmc.executebuiltin('Container.SetViewMode(515)')
+
+
+def run_cronjob(params):
+    extend=plugintools.get_setting(vod_channels("ZXh0ZW5k"))
+    plugintools.log(pnimi+sync_data("UExBWV9MSVZF")+repr(params))
+    #if vanemalukk == "true":
+       #pealkiri = params.get(sync_data("dGl0bGU="))
+       #vanema_lukk(pealkiri)
+    lopplink = params.get(vod_channels("dXJs"))
+    lopplink = lopplink.replace('.ts','.%s'%extend)
+    plugintools.play_resolved_url( lopplink )
+	
+def run_cronjobxxx(params):
+    kasutajanimi=plugintools.get_setting("Username")
+    salasona=plugintools.get_setting("Password")
+    lopplink = params.get("url")
+    if "http://"  not in lopplink: 
+        lopplink = get_live("aHR0cDovL290dHR2LmdhOjIwOTUvbGl2ZS8lcy8lcy8lcw==")%(kasutajanimi,salasona,lopplink)
+        lopplink = lopplink[:-2]
+        lopplink = lopplink + "m3u8"
+    listitem = xbmcgui.ListItem(path=lopplink)
+    xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, listitem)
+
+
+
+
+def sync_data(channel):
+    video = base64.b64decode(channel)
+    return video
+
+
+def restart_service(params):
+    lopplink = params.get(vod_channels("dXJs"))
+    plugintools.play_resolved_url( lopplink )
+
+
+
+def grab_epg():
+    req = urllib2.Request(andmelink)
+    req.add_header(sync_data("VXNlci1BZ2VudA==") , vod_channels("S29kaSBwbHVnaW4gYnkgTWlra00="))
+    response = urllib2.urlopen(req)
+    link=response.read()
+    jdata = json.loads(link.decode('utf8'))
+    response.close()
+    if jdata:
+       plugintools.log(pnimi+sync_data("amRhdGEgbG9hZGVkIA=="))
+       return jdata
+def kontroll():
+    randomstring = grab_epg()
+    kasutajainfo = randomstring[sync_data("dXNlcl9pbmZv")]
+    kontroll = kasutajainfo[get_live("YXV0aA==")]
+    return kontroll
+def get_live(channel):
+    video = base64.b64decode(channel)
+    return video
+def execute_ainfo(params):
+    plugintools.log(pnimi+get_live("TXkgYWNjb3VudCBNZW51IA==")+repr(params))
+    andmed = grab_epg()
+    kasutajaAndmed = andmed[sync_data("dXNlcl9pbmZv")]
+    seis = kasutajaAndmed[get_live("c3RhdHVz")]
+    aegub = kasutajaAndmed[sync_data("ZXhwX2RhdGU=")]
+    if aegub:
+       aegub = datetime.fromtimestamp(int(aegub)).strftime('%d/%m/%Y %H:%M')
+    else:
+       aegub = vod_channels("TmV2ZXI=")
+    leavemealone = kasutajaAndmed[get_live("bWF4X2Nvbm5lY3Rpb25z")]
+    polarbears = kasutajaAndmed[sync_data("dXNlcm5hbWU=")]
+    plugintools.add_item( action="",   title=sync_data("W0NPTE9SID0gd2hpdGVdVXNlcjogWy9DT0xPUl0=")+polarbears , thumbnail=os.path.join(LOAD_LIVE,vod_channels("bGl2ZXR2LnBuZw==")) , fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , folder=False )
+    plugintools.add_item( action="",   title=sync_data("W0NPTE9SID0gd2hpdGVdU3RhdHVzOiBbL0NPTE9SXQ==")+seis , thumbnail=os.path.join(LOAD_LIVE,vod_channels("bGl2ZXR2LnBuZw==")) , fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , folder=False )
+    plugintools.add_item( action="",   title=get_live("W0NPTE9SID0gd2hpdGVdRXhwaXJlczogWy9DT0xPUl0=")+aegub , thumbnail=os.path.join(LOAD_LIVE,vod_channels("bGl2ZXR2LnBuZw==")) , fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , folder=False )
+    plugintools.add_item( action="",   title=vod_channels("W0NPTE9SID0gd2hpdGVdTWF4IGNvbm5lY3Rpb25zOiBbL0NPTE9SXQ==")+leavemealone , thumbnail=os.path.join(LOAD_LIVE,vod_channels("bGl2ZXR2LnBuZw==")) , fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , folder=False )
+    plugintools.set_view( plugintools.LIST )
+def vanema_lukk(name):
+        plugintools.log(pnimi+sync_data("UGFyZW50YWwgbG9jayA="))
+        a = ''
+        if any(s in name for s in a):
+           xbmc.executebuiltin((u'XBMC.Notification("Parental-Lock", "Channels may contain adult content", 2000)'))
+           text = plugintools.keyboard_input(default_text="", title=get_live("UGFyZW50YWwtTG9jazogUGxlYXNlIGVudGVyIHlvdXIgUGFyZW50YWwgQ29kZQ=="))
+           if text==plugintools.get_setting(sync_data("dmFuZW1ha29vZA==")):
+              return
+           else:
+              exit()
+        else:
+           name = ""
+def kontrolli_uuendusi():
+        req = urllib2.Request(uuenduslink)
+        req.add_header(vod_channels("VXNlci1BZ2VudA==") , sync_data("S29kaSBwbHVnaW4gYnkgTWlra00="))
+        response = urllib2.urlopen(req)
+        repoversion=response.read()
+        repoversion = repoversion.partition("\n")
+        iversion = repoversion[1]
+        global dlink
+        dlink = repoversion[2]
+        response.close()
+        if iversion <> version:
+           update = " "
+        else:
+           if plugintools.message_yes_no(pnimi,sync_data("TmV3IHVwZGF0ZSBpcyBhdmFpbGFibGUh"),get_live("RG8geW91IHdhbnQgdG8gdXBkYXRlIHBsdWdpbiBub3c/")):
+              plugintools.log( pnimi+vod_channels("VHJ5aW5nIHRvIHVwZGF0ZSBwbHVnaW4uLi4="))
+              try:
+                  destpathname = xbmc.translatePath(os.path.join(sync_data("c3BlY2lhbDovLw=="),sync_data("aG9tZS9hZGRvbnMv")))
+                  local_file_name = os.path.join( plugintools.get_runtime_path() , get_live("dXBkYXRlLnppcA==") )
+                  plugintools.log(pnimi+local_file_name)
+                  urllib.urlretrieve(dlink, local_file_name )
+                  DownloaderClass(dlink,local_file_name)
+                  plugintools.log(pnimi+sync_data("RXh0cmFjdGluZyB1cGRhdGUuLi4="))
+                  import ziptools
+                  unzipper = ziptools.ziptools()
+                  #destpathname = xbmc.translatePath(os.path.join('special://','home'))
+                  plugintools.log(pnimi+destpathname)
+                  unzipper.extract( local_file_name , destpathname )
+                  os.remove(local_file_name)
+                  xbmc.executebuiltin((u'XBMC.Notification("Updated", "The add-on has been updated", 2000)'))
+                  #import updater
+                  xbmc.executebuiltin( "Container.Refresh" )
+                  plugintools.log(pnimi+get_live("VXBkYXRlIHN1Y2Nlc3M="))
+              except:
+                  plugintools.log(pnimi+get_live("VXBkYXRlIGZhaWxlZA=="))
+                  xbmc.executebuiltin((u'XBMC.Notification("Not updated", "An error causes the update to fail", 2000)'))
+def DownloaderClass(url,dest):
+    dp = xbmcgui.DialogProgress()
+    dp.create(sync_data("R2V0dGluZyB1cGRhdGU="),get_live("RG93bmxvYWRpbmc="))
+    urllib.urlretrieve(url,dest,lambda nb, bs, fs, url=url: _pbhook(nb,bs,fs,url,dp))
+def check_user():
+    plugintools.message(get_live("RVJST1I="),vod_channels("VU5BVVRIT1JJWkVEIEVESVQgT0YgQURET04h"))
+    sys.exit()
+def _pbhook(numblocks, blocksize, filesize, url=None,dp=None):
+    try:
+        percent = min((numblocks*blocksize*100)/filesize, 100)
+        print percent
+        dp.update(percent)
+    except:
+        percent = 100
+        dp.update(percent)
+    if dp.iscanceled(): 
+        print "DOWNLOAD CANCELLED" # need to get this part working
+        dp.close()
+def load_channels():
+    statinfo = os.stat(LOAD_LIVE+"/"+get_live("YmFja2dyb3VuZC5wbmc="))
+
+def vod_channels(channel):
+    video = base64.b64decode(channel)
+    return video
+run()
+
