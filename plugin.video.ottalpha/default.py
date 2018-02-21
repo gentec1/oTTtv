@@ -1,15 +1,21 @@
-import urllib,urllib2,sys,re,xbmcplugin,xbmcgui,xbmcaddon,datetime,os,json,base64,plugintools
+import urllib,urllib2,sys,re,xbmcplugin,xbmcgui,xbmcaddon,datetime,os,json,base64,plugintools,xbmc,socket
+from datetime import datetime as dtdeep
 import GoDev
-import orig
 import common,xbmcvfs,zipfile,downloader,extract
 import xml.etree.ElementTree as ElementTree
+import unicodedata
+import time
+import string
 reload(sys)
+dialog       =  xbmcgui.Dialog()
 sys.setdefaultencoding('utf8')
 SKIN_VIEW_FOR_MOVIES="515"
 addonDir = plugintools.get_runtime_path()
 global kontroll
-background = "YmFja2dyb3VuZC5wbmc=" #background.png
-defaultlogo = "bG9nby5wbmc=" #defaultlogo.png
+global EPGColour
+addon_id = "plugin.video.ottalpha"
+background = "YmFja2dyb3VuZC5wbmc=" 
+defaultlogo = "ZGVmYXVsdGxvZ28ucG5n" 
 hometheater = "aG9tZXRoZWF0ZXIuanBn"
 noposter = "bm9wb3N0ZXIuanBn"
 theater = "dGhlYXRlci5qcGc="
@@ -17,10 +23,26 @@ addonxml = "YWRkb24ueG1s"
 addonpy = "ZGVmYXVsdC5weQ=="
 icon = "aWNvbi5wbmc="
 fanart = "ZmFuYXJ0LmpwZw=="
+supplier = "RmFiIElQVFY="
+ICON = xbmc.translatePath(os.path.join('special://home/addons/' + addon_id, 'icon.png')) 
+FANART = xbmc.translatePath(os.path.join('special://home/addons/' + addon_id, 'fanart.jpg')) 
+APKS = base64.b64decode("aHR0cDovL2ZhYmlwdHYuY29tL2Fwa3MvbmV3YXBrcy50eHQ=")
+HOME =  xbmc.translatePath('special://home/')
+lehekylg= base64.b64decode("aHR0cDovL21sc2guY28=")
+pordinumber="2086"
 message = "VU5BVVRIT1JJWkVEIEVESVQgT0YgQURET04h"
+kasutajanimi=plugintools.get_setting("Username")
+salasona=plugintools.get_setting("Password")
+F1ICON = xbmc.translatePath(os.path.join('special://home/addons/' + addon_id, 'F1.png'))
+BASEURL = base64.b64decode("bmFkYQ==")
+LOAD_LIVEchan = os.path.join( plugintools.get_runtime_path() , "resources" , "art/arch" )
+loginurl   = base64.b64decode("JXM6JXMvZ2V0LnBocD91c2VybmFtZT0lcyZwYXNzd29yZD0lcyZ0eXBlPW0zdV9wbHVzJm91dHB1dD10cw==")%(lehekylg,pordinumber,kasutajanimi,salasona)
+
 def run():
     global pnimi
     global televisioonilink
+    global LiveCats
+    global PlayerAPI
     global filmilink
     global andmelink
     global uuenduslink
@@ -36,88 +58,320 @@ def run():
     if not kasutajanimi:
         kasutajanimi = "NONE"
         salasona="NONE"
-    lehekylg="http://mlsh.co"
-    pordinumber="2086"
+	
     uuendused=plugintools.get_setting(sync_data("dXVlbmR1c2Vk"))
     vanemalukk=plugintools.get_setting(sync_data("dmFuZW1hbHVraw=="))
     showxxx=plugintools.get_setting("showxxx")
-    pnimi = get_live("T25lIFZpZXc=")
+    pnimi = get_live("T25lIFZpZXcg")
     LOAD_LIVE = os.path.join( plugintools.get_runtime_path() , "resources" , "art" )
     plugintools.log(pnimi+get_live("U3RhcnRpbmcgdXA="))
     televisioonilink = get_live("JXM6JXMvZW5pZ21hMi5waHA/dXNlcm5hbWU9JXMmcGFzc3dvcmQ9JXMmdHlwZT1nZXRfbGl2ZV9jYXRlZ29yaWVz")%(lehekylg,pordinumber,kasutajanimi,salasona)
+    LiveCats = get_live("JXM6JXMvcGxheWVyX2FwaS5waHA/dXNlcm5hbWU9JXMmcGFzc3dvcmQ9JXMmYWN0aW9uPWdldF9saXZlX2NhdGVnb3JpZXM=")%(lehekylg,pordinumber,kasutajanimi,salasona)
+    PlayerAPI = get_live("JXM6JXMvcGxheWVyX2FwaS5waHA/dXNlcm5hbWU9JXMmcGFzc3dvcmQ9JXM=")%(lehekylg,pordinumber,kasutajanimi,salasona)
     filmilink = vod_channels("JXM6JXMvZW5pZ21hMi5waHA/dXNlcm5hbWU9JXMmcGFzc3dvcmQ9JXMmdHlwZT1nZXRfdm9kX2NhdGVnb3JpZXM=")%(lehekylg,pordinumber,kasutajanimi,salasona)
     andmelink = vod_channels("JXM6JXMvcGFuZWxfYXBpLnBocD91c2VybmFtZT0lcyZwYXNzd29yZD0lcw==")%(lehekylg,pordinumber,kasutajanimi,salasona)
-    uuenduslink = get_live("aHR0cHM6Ly93d3cuZHJvcGJveC5jb20vcy83ZW0yNHdkMXBkZGlkcW8vdmVyc2lvbi50eHQ/ZGw9MQ==")
-    #if get_live("T25lIFZpZXc=") not in open(addonDir+"/"+sync_data("YWRkb24ueG1s")).read():
-       #check_user()
     params = plugintools.get_params()
-    
+
     if params.get("action") is None:
         peamenyy(params)
     else:
         action = params.get("action")
         exec action+"(params)"
-
     plugintools.close_item_list()
 
 def peamenyy(params):
     plugintools.log(pnimi+vod_channels("TWFpbiBNZW51")+repr(params))
     load_channels()
     if not lehekylg:
-       plugintools.open_settings_dialog()
-    if uuendused == "true":
-       kontrolli_uuendusi()
+        plugintools.open_settings_dialog()
+
     channels = kontroll()
-    if channels == 1 and orig.mode != 5:
-       plugintools.log(pnimi+vod_channels("TG9naW4gU3VjY2Vzcw=="))
-       plugintools.add_item( action=vod_channels("ZXhlY3V0ZV9haW5mbw=="),   title="[COLOR white][B][I]MY ACCOUNT[/I][/B][/COLOR]", thumbnail=os.path.join(LOAD_LIVE,vod_channels("bXlhY2MucG5n")) , fanart=os.path.join(LOAD_LIVE,vod_channels("YmFja2dyb3VuZC5wbmc=")) , folder=True )
-       plugintools.add_item( action=vod_channels("c2VjdXJpdHlfY2hlY2s="),  title="[COLOR gold][B][I]OTTTV LIVE[/I][/B][/COLOR]" , thumbnail=os.path.join(LOAD_LIVE,vod_channels("bGl2ZXR2LnBuZw==")) , fanart=os.path.join(LOAD_LIVE,vod_channels("YmFja2dyb3VuZC5wbmc=")) , folder=True )
-       plugintools.add_item( action=vod_channels("ZGV0ZWN0X21vZGlmaWNhdGlvbg=="),   title='[COLOR deepskyblue][B]MOVIES/CATCHUP[/B][/COLOR]', thumbnail=os.path.join(LOAD_LIVE,vod_channels("dm9kLnBuZw==")) , fanart=os.path.join(LOAD_LIVE,vod_channels("YmFja2dyb3VuZC5wbmc=")) , folder=True )
-       plugintools.addItem('[COLOR orange][B]Launch PVR[/B][/COLOR]','pvr',12,orig.Images + 'launch-icon.png',orig.Images + 'background.png')
-       orig.AddDir('[COLOR teal][B]Clear Cache[/B][/COLOR]','Clear Cache',7,orig.Images + 'clear.png')
-       plugintools.add_item( action=vod_channels("bGljZW5zZV9jaGVjaw=="), title="[COLOR orangered][B][I]Settings[/I][/B][/COLOR]" , thumbnail=os.path.join(LOAD_LIVE,vod_channels("bG9nby5wbmc=")) , fanart=os.path.join(LOAD_LIVE,vod_channels("YmFja2dyb3VuZC5wbmc=")), folder=False )
-       plugintools.addItem('[COLOR limegreen][B][I]Click to Setup PVR SIMPLE CLIENT[/I][/B][/COLOR]','pvr',11,orig.Images + 'hqdefault.jpg',orig.Images + 'background.png')
-       orig.AddDir('[COLOR blue][B]FAVOURITES[/B][/COLOR]','TVShows',9,orig.Images + 'Favorites.png',orig.Images + 'background.png')
-	   
-    elif orig.mode != 5:
-       plugintools.add_item( action=vod_channels("bGljZW5zZV9jaGVjaw=="),  title="[COLOR yellow][B]Click here to enter login[/B][/COLOR]" , thumbnail=os.path.join(LOAD_LIVE,vod_channels("bG9nby5wbmc=")) , fanart=os.path.join(LOAD_LIVE,vod_channels("YmFja2dyb3VuZC5wbmc=")) , folder=False )
-
-       orig.AddDir('[COLOR yellow][B]Click here to refresh after login details have been entered[/B][/COLOR]','Clear Cache',7,orig.Images + 'clear.png')
-    if plugintools.get_setting("improve")=="true":
-        tseaded = xbmc.translatePath(sync_data("c3BlY2lhbDovL3VzZXJkYXRhL2FkdmFuY2Vkc2V0dGluZ3MueG1s"))
-        if not os.path.exists(tseaded):
-            file = open( os.path.join(plugintools.get_runtime_path(),vod_channels("cmVzb3VyY2Vz"),sync_data("YWR2YW5jZWRzZXR0aW5ncy54bWw=")) )
-            data = file.read()
-            file.close()
-            file = open(tseaded,"w")
-            file.write(data)
-            file.close()
-            plugintools.message(pnimi, get_live("TmV3IGFkdmFuY2VkIHN0cmVhbWluZyBzZXR0aW5ncyBhZGRlZC4="))
+    if channels == 1 and GoDev.mode != 5 and GoDev.mode != 1:
+        plugintools.log(pnimi+vod_channels("TG9naW4gU3VjY2Vzcw=="))
+        plugintools.add_item( action=vod_channels("c2VjdXJpdHlfY2hlY2s="),  title="[COLOR gold][B][I]OTT LIVE[/I][/B][/COLOR]", thumbnail=os.path.join(LOAD_LIVE,vod_channels("bGl2ZXR2LnBuZw==")) , fanart=os.path.join(LOAD_LIVE,vod_channels("YmFja2dyb3VuZC5wbmc=")) ,  folder=True )
+        plugintools.add_item( action=vod_channels("ZGV0ZWN0X21vZGlmaWNhdGlvbg=="),   title="[COLOR deepskyblue][B]VOD/TV SHOWS[/B][/COLOR]" , thumbnail=os.path.join(LOAD_LIVE,vod_channels("dm9kLnBuZw==")), fanart=os.path.join(LOAD_LIVE,vod_channels("YmFja2dyb3VuZC5wbmc=")) ,  folder=True )
+        plugintools.add_item( action=vod_channels("VGhlRGV2"),   title="[COLOR orange][B]CATCHUP[/B][/COLOR]" , thumbnail=os.path.join(LOAD_LIVE,vod_channels("dm9kLnBuZw==")), fanart=os.path.join(LOAD_LIVE,vod_channels("YmFja2dyb3VuZC5wbmc=")) , folder=True )
+        #plugintools.add_item( action=vod_channels("TGlzdGluZ3M="),   title="Listings" , thumbnail=os.path.join(LOAD_LIVE,vod_channels("aWNvbi5wbmc=")), fanart=os.path.join(LOAD_LIVE,vod_channels("YmFja2dyb3VuZC5wbmc=")) ,  folder=True )
+        #plugintools.add_item( action=vod_channels("R29EZXYuRmFiU3BvcnRz"),   title="Replays" , thumbnail=os.path.join(LOAD_LIVE,vod_channels("c3BvcnRzLnBuZw==")), fanart=os.path.join(LOAD_LIVE,vod_channels("YmFja2dyb3VuZC5wbmc=")) ,  folder=False )
+        #plugintools.add_item( action=vod_channels("R29EZXYuTUxCUGFzcw=="),   title="MLB" , thumbnail=os.path.join(LOAD_LIVE,vod_channels("TUxCLnBuZw==")), fanart=os.path.join(LOAD_LIVE,vod_channels("YmFja2dyb3VuZC5wbmc=")) ,  folder=False )
+        plugintools.add_item( action=vod_channels("bWFpbnRNZW51"),   title="[COLOR white][B]Maintenance Tools[/B][/COLOR]" , thumbnail=os.path.join(LOAD_LIVE,vod_channels("aWNvbi5wbmc=")), fanart=os.path.join(LOAD_LIVE,vod_channels("YmFja2dyb3VuZC5wbmc=")) ,  folder=True )
+        plugintools.add_item( action=vod_channels("VG9vbHM="),   title="[COLOR pink][B]Tools & Settings[/B][/COLOR]" , thumbnail=os.path.join(LOAD_LIVE,vod_channels("aWNvbi5wbmc=")), fanart=os.path.join(LOAD_LIVE,vod_channels("YmFja2dyb3VuZC5wbmc=")) ,  folder=True )
+        if not xbmc.getCondVisibility('Pvr.HasTVChannels'):
+            plugintools.add_item( action=vod_channels("R29EZXYuY29ycmVjdFBWUg=="),   title="[COLOR red][B]Setup Full PVR[/B][/COLOR]" , thumbnail=os.path.join(LOAD_LIVE,vod_channels("bGl2ZXR2LnBuZw==")), fanart=os.path.join(LOAD_LIVE,vod_channels("YmFja2dyb3VuZC5wbmc=")) ,  folder=False )
+            plugintools.add_item( action=vod_channels("R29EZXYuUFZSYmV0YQ=="),   title="[COLOR green][B]Setup PVR without VoD[/B][/COLOR]" , thumbnail=os.path.join(LOAD_LIVE,vod_channels("bGl2ZXR2LnBuZw==")), fanart=os.path.join(LOAD_LIVE,vod_channels("YmFja2dyb3VuZC5wbmc=")) ,  folder=False )
+        else:
+            plugintools.addItem('[COLOR lime][B]Launch PVR[/B][/COLOR]','speed',11,GoDev.Images + 'logo.png',GoDev.Images + 'background.png')
+            plugintools.add_item( action=vod_channels("R29EZXYuZGlzYWJsZVBWUg=="),   title="[COLOR red][B]Disable PVR[/B][/COLOR]" , thumbnail=os.path.join(LOAD_LIVE,vod_channels("bGl2ZXR2LnBuZw==")), fanart=os.path.join(LOAD_LIVE,vod_channels("YmFja2dyb3VuZC5wbmc=")) ,  folder=False )
+    elif channels != 1 and GoDev.mode != 1:
+        plugintools.add_item( action=vod_channels("bGljZW5zZV9jaGVjaw=="), title="[COLOR gold][B]Step 1. Insert Login Credentials[/B][/COLOR]" , thumbnail=os.path.join(LOAD_LIVE,vod_channels("aWNvbi5wbmc=")), fanart=os.path.join(LOAD_LIVE,vod_channels("YmFja2dyb3VuZC5wbmc=")), folder=False )	
+        plugintools.add_item( action=vod_channels("bGljZW5zZV9jaGVjazI="), title="[COLOR gold][B]Step 2. Click Once Login Is Input[/B][/COLOR]" , thumbnail=os.path.join(LOAD_LIVE,vod_channels("aWNvbi5wbmc=")), fanart=os.path.join(LOAD_LIVE,vod_channels("YmFja2dyb3VuZC5wbmc=")), folder=False )	
 
 
+def Tools(params):
+	plugintools.add_item( action=vod_channels("ZXhlY3V0ZV9haW5mbw=="),   title="[COLOR gold][B]Account Information[/B][/COLOR]", thumbnail=os.path.join(LOAD_LIVE,vod_channels("bXlhY2MucG5n")), fanart=os.path.join(LOAD_LIVE,vod_channels("YmFja2dyb3VuZC5wbmc=")) ,  folder=True )
+	plugintools.addItem('[COLOR gold][B]Run Speedtest[/B][/COLOR]','speed',9,GoDev.Images + 'speed.png',GoDev.Images + 'background.png')
+	plugintools.add_item( action=vod_channels("R29EZXYuREN0ZXN0"),   title="[COLOR gold][B]Datacentre Speedtest[/B][/COLOR]" , thumbnail=GoDev.Images + 'speed.png', fanart=os.path.join(LOAD_LIVE,vod_channels("YmFja2dyb3VuZC5wbmc=")) ,  folder=True )
+	plugintools.add_item( action=vod_channels("bGljZW5zZV9jaGVjaw=="), title="[COLOR gold][B]Addon Settings[/B][/COLOR]" , thumbnail=os.path.join(LOAD_LIVE,vod_channels("aWNvbi5wbmc=")), fanart=os.path.join(LOAD_LIVE,vod_channels("YmFja2dyb3VuZC5wbmc=")) ,  folder=False )
+
+
+def TheDev(params):
+    tvaAPI = base64.b64decode("JXM6JXMvcGFuZWxfYXBpLnBocD91c2VybmFtZT0lcyZwYXNzd29yZD0lcw==")%(lehekylg,pordinumber,kasutajanimi,salasona)
+    link=open_url(tvaAPI)
+    archivecheck = re.compile('"num":.+?,"name":"(.+?)".+?"stream_id":"(.+?)","stream_icon":"(.+?)".+?"tv_archive":(.+?).+?"tv_archive_duration":(.+?)}').findall(link)
+    for kanalinimi,streamid,streamicon,tvarchive,archdays in archivecheck:
+        if tvarchive == '1':
+            streamicon = streamicon.replace('\/','/')
+            archdays = archdays.replace('"','')
+            plugintools.add_item( action=sync_data("dHZhcmNoaXZl"), title='[COLOR white]'+kanalinimi+'[/COLOR]' , thumbnail=streamicon, extra=streamid, page=archdays, fanart=os.path.join(LOAD_LIVE,sync_data("aG9tZXRoZWF0ZXIuanBn")), isPlayable=False, folder=True )
+            plugintools.set_view( plugintools.LIST )
+
+def tvarchive(extra):
+    plugintools.set_view( plugintools.EPISODES )
+    extra = str(extra)
+    extra = extra.replace(',','')
+    days = re.compile("'page': '(.+?)'").findall(extra)
+    days = str(days)
+    days = days.replace("['","").replace("']","")
+    days = int(days)
+    streamid = re.compile("'extra': '(.+?)'").findall(extra)
+    streamicon = re.compile("'thumbnail': '(.+?)'").findall(extra)
+    streamid = str(streamid)
+    streamid = streamid.replace("['","").replace("']","")
+    streamicon = str(streamicon)
+    streamicon = streamicon.replace("['","").replace("']","")
+    now = str(datetime.datetime.now()).replace('-','').replace(':','').replace(' ','')
+    date3 = datetime.datetime.now() - datetime.timedelta(days)
+    date = str(date3)
+    date = str(date).replace('-','').replace(':','').replace(' ','')
+    APIv2 = base64.b64decode("JXM6JXMvcGxheWVyX2FwaS5waHA/dXNlcm5hbWU9JXMmcGFzc3dvcmQ9JXMmYWN0aW9uPWdldF9zaW1wbGVfZGF0YV90YWJsZSZzdHJlYW1faWQ9JXM=")%(lehekylg,pordinumber,kasutajanimi,salasona,streamid)
+    link=open_url(APIv2)
+    match = re.compile('"title":"(.+?)".+?"start":"(.+?)","end":"(.+?)","description":"(.+?)"').findall(link)
+    for ShowTitle,start,end,DesC in match:
+        ShowTitle = base64.b64decode(ShowTitle)
+        DesC = base64.b64decode(DesC)
+        format = '%Y-%m-%d %H:%M:%S'
+        try:
+            modend = dtdeep.strptime(end, format)
+            modstart = dtdeep.strptime(start, format)
+        except:
+            modend = datetime.datetime(*(time.strptime(end, format)[0:6]))
+            modstart = datetime.datetime(*(time.strptime(start, format)[0:6]))
+        StreamDuration = modend - modstart
+        modend_ts = time.mktime(modend.timetuple())
+        modstart_ts = time.mktime(modstart.timetuple())
+        Duration=plugintools.get_setting("FinalDuration")
+        if not Duration == 'Off':
+            FinalDuration = Duration
+        else:
+            FinalDuration = int(modend_ts-modstart_ts) / 60
+        strstart = start
+        Realstart = str(strstart).replace('-','').replace(':','').replace(' ','')
+        start2 = start[:-3]
+        editstart = start2
+        start2 = str(start2).replace(' ',' - ')
+        t = float(modstart_ts)
+        Prefix =  time.strftime("%a %d %H:%M", time.gmtime(t))
+        start = str(editstart).replace(' ',':')
+        Editstart = start[:13] + '-' + start[13:]
+        Finalstart = Editstart.replace('-:','-')
+        if Realstart > date:
+            if Realstart < now:
+                catchupURL = base64.b64decode("JXM6JXMvc3RyZWFtaW5nL3RpbWVzaGlmdC5waHA/dXNlcm5hbWU9JXMmcGFzc3dvcmQ9JXMmc3RyZWFtPSVzJnN0YXJ0PQ==")%(lehekylg,pordinumber,kasutajanimi,salasona,streamid)
+                ResultURL = catchupURL + str(Finalstart) + "&duration=%s"%(FinalDuration)
+                kanalinimi = str('[COLOR white]'+Prefix+'[/COLOR]')+ " - " + '[COLOR gold]'+ShowTitle+'[/COLOR]'
+                plugintools.add_item( action=sync_data("cnVuX2Nyb25qb2I="), title=kanalinimi , url=ResultURL, thumbnail=streamicon , plot=DesC, fanart=os.path.join(LOAD_LIVE,sync_data("aG9tZXRoZWF0ZXIuanBn")) , extra="", isPlayable=True, folder=False )
 
 def license_check(params):
     plugintools.log(pnimi+get_live("U2V0dGluZ3MgbWVudQ==")+repr(params))
     plugintools.open_settings_dialog()
+
+def license_check2(params):
+	d = urllib.urlopen(loginurl)
+	FileInfo = d.info()['Content-Type']
+	if not 'application/octet-stream' in FileInfo:
+		dialog.ok('[COLOR white]Invalid Login[/COLOR]','[COLOR white]Incorrect login details found![/COLOR]','[COLOR white]Please check your spelling and case sensitivity[/COLOR]','[COLOR white]Check your password with the team otherwise[/COLOR]')
+		plugintools.open_settings_dialog()
+	else:
+		xbmc.executebuiltin('Container.Refresh')
+
+def get_size(start_path):
+    total_size = 0
+    for dirpath, dirnames, filenames in os.walk(start_path):
+        for f in filenames:
+            fp = os.path.join(dirpath, f)
+            total_size += os.path.getsize(fp)
+    return total_size
+
+def convertSize(size):
+   import math
+   if (size == 0):
+       return '[COLOR lime]0 MB[/COLOR]'
+   size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
+   i = int(math.floor(math.log(size,1024)))
+   p = math.pow(1024,i)
+   s = round(size/p,2)
+   if size_name == "B" or "KB":
+        return '[COLOR lime]%s %s' % (s,size_name[i]) + '[/COLOR]'
+   if size_name == "GB" or "TB" or "PB" or "EB" or "ZB" or "YB":
+        return '[COLOR red]%s %s' % (s,size_name[i]) + '[/COLOR]'
+   if s >= 100:
+        return '[COLOR red]%s %s' % (s,size_name[i]) + '[/COLOR]'
+   if s < 50:
+        return '[COLOR lime]%s %s' % (s,size_name[i]) + '[/COLOR]'
+   if s >= 50:
+        if i < 100:
+            return '[COLOR orange]%s %s' % (s,size_name[i]) + '[/COLOR]'
+
+def maintMenu(params):
+
+	CACHE      =  xbmc.translatePath(os.path.join('special://home/cache',''))
+	PACKAGES   =  xbmc.translatePath(os.path.join('special://home/addons','packages'))
+	THUMBS     =  xbmc.translatePath(os.path.join('special://home/userdata','Thumbnails'))
+
+	if not os.path.exists(CACHE):
+		CACHE     =  xbmc.translatePath(os.path.join('special://home/temp',''))
+	if not os.path.exists(PACKAGES):
+		os.makedirs(PACKAGES)
+
+	CACHE_SIZE_BYTE    = get_size(CACHE)
+	PACKAGES_SIZE_BYTE = get_size(PACKAGES)
+	THUMB_SIZE_BYTE    = get_size(THUMBS)
+	
+	CACHE_SIZE    = convertSize(CACHE_SIZE_BYTE)
+	PACKAGES_SIZE = convertSize(PACKAGES_SIZE_BYTE)
+	THUMB_SIZE    = convertSize(THUMB_SIZE_BYTE)
+
+	startup_clean = plugintools.get_setting("acstartup")
+	weekly_clean = plugintools.get_setting("clearday")
+
+	if startup_clean == "false":
+		startup_onoff = "[COLOR red]OFF[/COLOR]"
+	else:
+		startup_onoff = "[COLOR lime]ON[/COLOR]"
+	if weekly_clean == "0":
+		weekly_onoff = "[COLOR red]OFF[/COLOR]"
+	else:
+		weekly_onoff = "[COLOR lime]ON[/COLOR]"
+
+	common.addItem('[COLOR white][B]Auto Clean Device[/B][/COLOR]','url',19,ICON,FANART,'')
+	common.addItem("[COLOR white][B]Clear Cache[/B][/COLOR] - Current Size: " + str(CACHE_SIZE),BASEURL,20,ICON,FANART,'')
+	common.addItem("[COLOR white][B]Delete Thumbnails [/B][/COLOR] - Current Size: " + str(THUMB_SIZE),BASEURL,22,ICON,FANART,'')
+	common.addItem("[COLOR white][B]Purge Packages [/B][/COLOR] - Current Size: " + str(PACKAGES_SIZE),BASEURL,23,ICON,FANART,'')
+	common.addItem('[COLOR white][B]Update Addons & Repos[/B][/COLOR]',BASEURL,26,ICON,FANART,'')
+
 def security_check(params):
-    plugintools.log(pnimi+sync_data("TGl2ZSBNZW51")+repr(params))
-    request = urllib2.Request(televisioonilink, headers={"Accept" : "application/xml"})
+	plugintools.add_item( action=vod_channels("VFZzZWFyY2g="),   title="[COLOR red][B]Search Shows on Now[/B][/COLOR]" , thumbnail=os.path.join(LOAD_LIVE,vod_channels("U2VhcmNoLWljb24ucG5n")), fanart=os.path.join(LOAD_LIVE,vod_channels("bGl2ZXR2LnBuZw==")) ,  folder=True )
+	plugintools.log(pnimi+sync_data("TGl2ZSBNZW51")+repr(params))
+	request = urllib2.Request(televisioonilink, headers={"Accept" : "application/xml","User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.101 Safari/537.36"})
+	u = urllib2.urlopen(request)
+	tree = ElementTree.parse(u)
+	rootElem = tree.getroot()
+	for channel in tree.findall(sync_data("Y2hhbm5lbA==")):
+		kanalinimi = channel.find(get_live("dGl0bGU=")).text
+		kanalinimi = base64.b64decode(kanalinimi)
+		kategoorialink = channel.find(vod_channels("cGxheWxpc3RfdXJs")).text
+		CatID = channel.find(get_live("Y2F0ZWdvcnlfaWQ=")).text
+		ICON = os.path.join(LOAD_LIVE,sync_data("aWNvbi5wbmc="))
+		if 'NHL' in kanalinimi.upper():
+			ICON=os.path.join(LOAD_LIVE,sync_data("TkhMLnBuZw=="))
+		if 'MLB' in kanalinimi.upper():
+			ICON=os.path.join(LOAD_LIVE,sync_data("TUxCLnBuZw=="))
+		if 'SPORTS' in kanalinimi.upper():
+			ICON=os.path.join(LOAD_LIVE,sync_data("c3BvcnRzLnBuZw=="))
+		if 'USA' in kanalinimi.upper():
+			ICON=os.path.join(LOAD_LIVE,sync_data("VVNBLnBuZw=="))
+		if 'RADIO' in kanalinimi.upper():
+			ICON=os.path.join(LOAD_LIVE,sync_data("VGhlX0xpdmVfUmFkaW9fTG9nby5wbmc="))
+		if 'CANADIAN' in kanalinimi.upper():
+			ICON=os.path.join(LOAD_LIVE,sync_data("RmxhZ19NYXBfb2ZfdGhlX1VuaXRlZF9TdGF0ZXNfKENhbmFkYSkucG5n"))
+		if 'LATINO' in kanalinimi.upper():
+			ICON=os.path.join(LOAD_LIVE,sync_data("c3BhbmlzaC5wbmc="))
+		if 'PAY PER VIEW' in kanalinimi.upper():
+			ICON=os.path.join(LOAD_LIVE,sync_data("UFBWLUxvZ28tRmluYWwucG5n"))
+		if '24/7' in kanalinimi.upper():
+			ICON=os.path.join(LOAD_LIVE,sync_data("MjQ3LnBuZw=="))
+		if 'LOCAL NEWS' in kanalinimi.upper():
+			ICON=os.path.join(LOAD_LIVE,sync_data("TkVXUy5wbmc="))
+		if 'ALL' in kanalinimi.upper():
+			ICON=os.path.join(LOAD_LIVE,sync_data("YWxsY2hhbm5lbHMucG5n"))
+		if 'MUSIC' in kanalinimi.upper():
+			ICON=os.path.join(LOAD_LIVE,sync_data("TXVzaWMtaWNvbi5wbmc="))
+		if 'NFL' in kanalinimi.upper():
+			ICON=os.path.join(LOAD_LIVE,sync_data("TkZMVVMucG5n"))
+		if 'NBA' in kanalinimi.upper():
+			ICON=os.path.join(LOAD_LIVE,sync_data("TkJBVFYucG5n"))
+		if 'ADULT' in kanalinimi.upper():
+			ICON=os.path.join(LOAD_LIVE,sync_data("UE9STi5wbmc="))
+
+
+
+		plugintools.add_item( action=get_live("c3RyZWFtX3ZpZGVv"), title=kanalinimi , url=CatID , thumbnail=ICON , fanart=os.path.join(LOAD_LIVE,sync_data("bGl2ZXR2LnBuZw==")) ,info_labels=kanalinimi, folder=True )
+
+	plugintools.set_view( plugintools.LIST )
+	
+
+
+def stream_video(params):
+    EPGColour=plugintools.get_setting("EPGColour")
+    kasutajanimi=plugintools.get_setting("Username")
+    salasona=plugintools.get_setting("Password")
+    CatID = params.get(get_live("dXJs")) #description
+    url = get_live("JXM6JXMvZW5pZ21hMi5waHA/dXNlcm5hbWU9JXMmcGFzc3dvcmQ9JXMmdHlwZT1nZXRfbGl2ZV9zdHJlYW1zJmNhdF9pZD0lcw==")%(lehekylg,pordinumber,kasutajanimi,salasona,CatID)
+    request = urllib2.Request(url, headers={"Accept" : "application/xml","User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.101 Safari/537.36"})
     u = urllib2.urlopen(request)
     tree = ElementTree.parse(u)
     rootElem = tree.getroot()
-    for channel in tree.findall(sync_data("Y2hhbm5lbA==")):
-        kanalinimi = channel.find(get_live("dGl0bGU=")).text
+    for channel in tree.findall(sync_data("Y2hhbm5lbA==")): #channel
+        kanalinimi = channel.find(get_live("dGl0bGU=")).text #title
         kanalinimi = base64.b64decode(kanalinimi)
-        a = 'XXX', 'Adult', 'Adults','ADULT','ADULTS','adult','adults','Porn','PORN','porn','Porn','xxx', '18+'
-        if showxxx == "false":
-          if any(s in kanalinimi for s in a):
-            return
-        kategoorialink = channel.find(vod_channels("cGxheWxpc3RfdXJs")).text
-        plugintools.add_item( action=get_live("c3RyZWFtX3ZpZGVv"), title=kanalinimi , url=kategoorialink , thumbnail=os.path.join(LOAD_LIVE,sync_data("bG9nby5wbmc=")) , fanart="" , folder=True )
-    plugintools.set_view( plugintools.LIST )
+        kanalinimi = kanalinimi.partition("[")
+        striimilink = channel.find(get_live("c3RyZWFtX3VybA==")).text #stream_url
+        pony = striimilink
+        if ("%s:%s/enigma2.php")%(lehekylg,pordinumber)  in striimilink: 
+            pony = striimilink.split(kasutajanimi,1)[1]
+            pony = pony.split(salasona,1)[1]
+            pony = pony.split("/",1)[1]            
+        pilt = channel.find(vod_channels("ZGVzY19pbWFnZQ==")).text #desc_image
+        kava = kanalinimi[1]+kanalinimi[2]
+        kava = kava.partition("]")
+        kava = kava[2]
+        kava = kava.partition("   ")
+        kava = kava[2]
+        shou = get_live("W0NPTE9SIHdoaXRlXSVzWy9DT0xPUl0gW0NPTE9SICVzXSVzIFsvQ09MT1Jd")%(kanalinimi[0],EPGColour,kava)
+        kirjeldus = channel.find(sync_data("ZGVzY3JpcHRpb24=")).text #description
+        if kirjeldus:
+           kirjeldus = base64.b64decode(kirjeldus)
+           nyyd = kirjeldus.partition("(")
+           nyyd = sync_data("Tm93OiA=") +nyyd[0]
+           jargmine = kirjeldus.partition(")\n")
+           jargmine = jargmine[2].partition("(")
+           jargmine = sync_data("TmV4dDog") +jargmine[0] #shou
+           kokku = nyyd+jargmine
+        else:
+           kokku = ""
+        if pilt:
+           plugintools.add_item( action=sync_data("cnVuX2Nyb25qb2I="), title=shou , url=pony, thumbnail=pilt, plot=kokku, fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")), extra="", isPlayable=True, folder=False )
+        else:
+           plugintools.add_item( action=sync_data("cnVuX2Nyb25qb2I="), title=shou , url=pony, thumbnail=os.path.join(LOAD_LIVE,vod_channels("YWxsY2hhbm5lbHMucG5n")) , plot=kokku, fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , extra="", isPlayable=True, folder=False )
+    plugintools.set_view( plugintools.EPISODES )
+
+def Print(OuT):
+	HOME = xbmc.translatePath('special://home')
+	if "Users\\" in HOME:
+		Name,Appdata = str(HOME).split("Roaming")
+		Desktop = Name.replace('AppData','Desktop')
+	ResultFile = Desktop + 'test.txt'
+	if os.path.exists(ResultFile):
+		os.remove(ResultFile)
+		time.sleep(3)
+	f = open(ResultFile, 'a')
+	f.write(OuT)
+
 def detect_modification(params):
-    plugintools.log(pnimi+vod_channels("Vk9EIE1lbnUg")+repr(params))        
-    request = urllib2.Request(filmilink, headers={"Accept" : "application/xml"})
+    plugintools.add_item( action=vod_channels("Vk9Ec2VhcmNo"),   title="[COLOR red][B]Search for VOD/TV SHOWS[/B][/COLOR]" , thumbnail=os.path.join(LOAD_LIVE,vod_channels("U2VhcmNoLWljb24ucG5n")), fanart=os.path.join(LOAD_LIVE,vod_channels("YmFja2dyb3VuZC5wbmc=")) ,  folder=True )
+    plugintools.add_item( action=vod_channels("UmVjZW50bHlBZGRlZA=="),   title="Recently Added" , thumbnail=os.path.join(LOAD_LIVE,vod_channels("dm9kLnBuZw==")), fanart=os.path.join(LOAD_LIVE,vod_channels("YmFja2dyb3VuZC5wbmc=")) ,  folder=True )
+    plugintools.log(pnimi+vod_channels("Vk9EIE1lbnUg")+repr(params))
+    request = urllib2.Request(filmilink, headers={"Accept" : "application/xml","User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.101 Safari/537.36"})
     u = urllib2.urlopen(request)
     tree = ElementTree.parse(u)
     rootElem = tree.getroot()
@@ -125,232 +379,279 @@ def detect_modification(params):
         filminimi = channel.find(get_live("dGl0bGU=")).text
         filminimi = base64.b64decode(filminimi)
         kategoorialink = channel.find(vod_channels("cGxheWxpc3RfdXJs")).text
-        plugintools.add_item( action=vod_channels("Z2V0X215YWNjb3VudA=="), title=filminimi , url=kategoorialink , thumbnail = "" , fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , folder=True )
+        plugintools.add_item( action=vod_channels("Z2V0X215YWNjb3VudA=="), title=filminimi , url=kategoorialink , thumbnail=os.path.join(LOAD_LIVE,sync_data("dm9kLnBuZw==")) , fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , folder=True )
+	
     plugintools.set_view( plugintools.LIST )
-def stream_video(params):
-    alreadyinput = False
-    plugintools.log(pnimi+sync_data("TGl2ZSBDaGFubmVscyBNZW51IA==")+repr(params))
-    #if get_live("T25lIFZpZXc=") not in open(addonDir+"/"+sync_data("YWRkb24ueG1s")).read():
-       #check_user()
-    #if vanemalukk == "true":
-     #  pealkiri = params.get(sync_data("dGl0bGU="))
-      # vanema_lukk(pealkiri)
-    url = params.get(get_live("dXJs"))
-    request = urllib2.Request(url, headers={"Accept" : "application/xml"})
+
+def open_url(url):
+    try:
+        req = urllib2.Request(url,headers={"Accept" : "application/xml","User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.101 Safari/537.36"})
+        response = urllib2.urlopen(req)
+        link=response.read()
+        response.close()
+        return link
+    except:quit()
+
+def RecentlyAdded(params):
+	plugintools.set_view( plugintools.MOVIES )
+	Recent = base64.b64decode(b'JXM6JXMvcGxheWVyX2FwaS5waHA/dXNlcm5hbWU9JXMmcGFzc3dvcmQ9JXMmYWN0aW9uPWdldF92b2Rfc3RyZWFtcw==')%(lehekylg,pordinumber,kasutajanimi,salasona)
+	Load = json.load(urllib2.urlopen(Recent))
+	now = datetime.datetime.now()
+	diff = datetime.timedelta(days=7)
+	future = now - diff
+	Past = future.strftime("%Y-%m-%d %H:%M:%S")
+	for x in Load:
+		DateAdded = x['added']
+		pealkiri = x['name']
+		Icon = x['stream_icon']
+		StreamID = x['stream_id']
+		Ext = x['container_extension']
+		Normal = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(float(DateAdded)))
+		if Normal > Past:
+			if StreamID:
+				striimilink = vod_channels('JXM6JXMvbW92aWUvJXMvJXMvJXMuJXM=')%(lehekylg,pordinumber,kasutajanimi,salasona,StreamID,Ext)
+				URL = vod_channels('JXM6JXMvcGxheWVyX2FwaS5waHA/dXNlcm5hbWU9JXMmcGFzc3dvcmQ9JXMmYWN0aW9uPWdldF92b2RfaW5mbyZ2b2RfaWQ9JXM=')%(lehekylg,pordinumber,kasutajanimi,salasona,StreamID)
+				Meta = json.load(urllib2.urlopen(URL))
+				try:
+					Plot = Meta['info']['plot']
+				except:
+					Plot = 'No plot Available'
+				try:
+					Genre = Meta['info']['genre']
+				except:
+					Genre = 'Unknown Genre'
+				try:
+					Director = Meta['info']['director']
+				except:
+					Director = 'No Director Specified'
+				try:
+					ReleaseDate = Meta['info']['releasedate']
+				except:
+					ReleaseDate = 'Release Date Not Found'
+				try:
+					Duration = Meta['info']['duration']
+				except:
+					Duration = 'Duration Not Found'
+				kirjeldus = Duration+'\n'+Plot.encode("utf-8")+'\n'+Director.encode("utf-8")+'\n'+Genre.encode("utf-8")+'\n'+ReleaseDate
+				if Icon:
+					plugintools.add_item( action="restart_service", title=pealkiri.encode("utf-8") , url=striimilink, thumbnail=Icon, plot=kirjeldus.encode("utf-8"), fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , extra="", isPlayable=True, folder=False )
+				else:
+					plugintools.add_item( action="restart_service", title=pealkiri.encode("utf-8") , url=striimilink, thumbnail=os.path.join(LOAD_LIVE,sync_data("dm9kLnBuZw==")), plot=kirjeldus.encode("utf-8"), fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , extra="", isPlayable=True, folder=False )
+
+def VODsearch(params):
+	SEARCH_LIST = base64.b64decode(b'JXM6JXMvZW5pZ21hMi5waHA/dXNlcm5hbWU9JXMmcGFzc3dvcmQ9JXMmdHlwZT1nZXRfdm9kX3N0cmVhbXMmY2F0X2lkPTA=')%(lehekylg,pordinumber,kasutajanimi,salasona)
+	keyb = xbmc.Keyboard('', '[COLOR white]Search[/COLOR]')
+	keyb.doModal()
+	if (keyb.isConfirmed()):
+		searchterm=keyb.getText()
+		searchterm=string.capwords(searchterm)
+	else:quit()
+	link=open_url(SEARCH_LIST) 
+	match = re.compile('<title>(.+?)</title><desc_image><!\[CDATA\[(.+?)\]\]></desc_image><description>(.+?)</description>.+?<stream_url><!\[CDATA\[(.+?)\]\]></stream_url>').findall(link)
+	for pealkiri,pilt,kirjeldus,striimilink in match:
+		pealkiri = base64.b64decode(pealkiri)
+		pealkiri = pealkiri.encode("utf-8")
+		if kirjeldus:
+			kirjeldus = base64.b64decode(kirjeldus)
+		if searchterm in pealkiri:
+			if pilt:
+				plugintools.add_item( action="restart_service", title=pealkiri , url=striimilink, thumbnail=pilt, plot=kirjeldus, fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , extra="", isPlayable=True, folder=False )
+			else:
+				plugintools.add_item( action="restart_service", title=pealkiri , url=striimilink, thumbnail=os.path.join("dm9kLnBuZw=="), plot=kirjeldus, fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , extra="", isPlayable=True, folder=False )
+
+def TVsearch(params):
+	EPGColour=plugintools.get_setting("EPGColour")
+	SEARCH_LIST = base64.b64decode(b'JXM6JXMvZW5pZ21hMi5waHA/dXNlcm5hbWU9JXMmcGFzc3dvcmQ9JXMmdHlwZT1nZXRfbGl2ZV9zdHJlYW1zJmNhdF9pZD0w')%(lehekylg,pordinumber,kasutajanimi,salasona)
+	keyb = xbmc.Keyboard('', '[COLOR white]Search[/COLOR]')
+	keyb.doModal()
+	if (keyb.isConfirmed()):
+		searchterm=keyb.getText()
+		searchterm=string.capwords(searchterm)
+	else:quit()
+	request = urllib2.Request(SEARCH_LIST, headers={"Accept" : "application/xml","User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.101 Safari/537.36"})
+	u = urllib2.urlopen(request)
+	tree = ElementTree.parse(u)
+	rootElem = tree.getroot()
+	for channel in tree.findall(sync_data("Y2hhbm5lbA==")): #channel
+		kanalinimi = channel.find(get_live("dGl0bGU=")).text #title
+		kanalinimi = base64.b64decode(kanalinimi)
+		kanalinimi = kanalinimi.partition("[")
+		striimilink = channel.find(get_live("c3RyZWFtX3VybA==")).text #stream_url
+		pony = striimilink
+		if ("%s:%s/enigma2.php")%(lehekylg,pordinumber) in striimilink:
+			pony = striimilink.split(kasutajanimi,1)[1]
+			pony = pony.split(salasona,1)[1]
+			pony = pony.split("/",1)[1]			
+		pilt = channel.find(vod_channels("ZGVzY19pbWFnZQ==")).text #desc_image
+		kava = kanalinimi[1]+kanalinimi[2]
+		kava = kava.partition("]")
+		kava = kava[2]
+		kava = kava.partition("   ")
+		kava = kava[2]
+		shou = get_live("W0NPTE9SIHdoaXRlXSVzWy9DT0xPUl0gW0NPTE9SICVzXSVzIFsvQ09MT1Jd")%(kanalinimi[0],EPGColour,kava)
+		kirjeldus = channel.find(sync_data("ZGVzY3JpcHRpb24=")).text #description
+		if kirjeldus:
+			kirjeldus = base64.b64decode(kirjeldus)
+			nyyd = kirjeldus.partition("(")
+			nyyd = sync_data("Tm93OiA=") +nyyd[0]
+			jargmine = kirjeldus.partition(")\n")
+			jargmine = jargmine[2].partition("(")
+			jargmine = sync_data("TmV4dDog") +jargmine[0] #shou
+			kokku = nyyd+jargmine
+		else:
+			kokku = ""
+		if searchterm in kava:
+			if pilt:
+				plugintools.add_item( action=sync_data("cnVuX2Nyb25qb2I="), title=shou , url=pony, thumbnail=pilt, plot=kokku, fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")), extra="", isPlayable=True, folder=False )
+			else:
+				plugintools.add_item( action=sync_data("cnVuX2Nyb25qb2I="), title=shou , url=pony, thumbnail=os.path.join(LOAD_LIVE,vod_channels("YWxsY2hhbm5lbHMucG5n")) , plot=kokku, fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , extra="", isPlayable=True, folder=False )
+
+def get_myaccount(params):
+    if vanemalukk == "true":
+       pealkiri = params.get("title")
+       vanema_lukk(pealkiri)
+    purl = params.get("url")
+    request = urllib2.Request(purl, headers={"Accept" : "application/xml","User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.101 Safari/537.36"})
     u = urllib2.urlopen(request)
     tree = ElementTree.parse(u)
     rootElem = tree.getroot()
-    for channel in tree.findall(sync_data("Y2hhbm5lbA==")):
-        kanalinimi = channel.find(get_live("dGl0bGU=")).text
-        kanalinimi = base64.b64decode(kanalinimi)
-        kanalinimi = kanalinimi.partition("[")
-        striimilink = channel.find(get_live("c3RyZWFtX3VybA==")).text
-        pilt = channel.find(vod_channels("ZGVzY19pbWFnZQ==")).text
-        kava = kanalinimi[1]+kanalinimi[2]
-        kava = kava.partition("]")
-        kava = kava[2]
-        kava = kava.partition("   ")
-        kava = kava[2]
-        shou = get_live("W0NPTE9SIHN0ZWVsYmx1ZV0lcyBbL0NPTE9SXQ==")%(kanalinimi[0])+"- [COLOR Normal \e[1mBold]" + kava + "[/COLOR]"
-        kirjeldus = channel.find(sync_data("ZGVzY3JpcHRpb24=")).text
-        if kirjeldus:
-           kirjeldus = base64.b64decode(kirjeldus)
-           nyyd = kirjeldus.partition("(")
-           nyyd = sync_data("Tk9XOiA=") +nyyd[0]
-           jargmine = kirjeldus.partition(")\n")
-           jargmine = jargmine[2].partition("(")
-           jargmine = sync_data("TkVYVDog") +jargmine[0]
-           kokku = nyyd+jargmine
-        else:
-           kokku = ""
-        a = 'XXX', 'Adult', 'Adults','ADULT','ADULTS','adult','adults','Porn','PORN','porn','Porn','xxx', '18+'
-        if vanemalukk == "true":
-          if alreadyinput != True:
-            if any(s in shou for s in a):
-                xbmc.executebuiltin((u'XBMC.Notification("Parental-Lock Enabled!", "Channels may contain adult content", 2000)'))
-                dialog = xbmcgui.Dialog()
-                text = dialog.input(get_live('UGFyZW50YWwtTG9jazogUGxlYXNlIGVudGVyIHlvdXIgUGFyZW50YWwgQ29kZQ=='), type=xbmcgui.INPUT_NUMERIC, option=xbmcgui.ALPHANUM_HIDE_INPUT)
-                if text!=plugintools.get_setting(sync_data("dmFuZW1ha29vZA==")):
-                    xbmc.executebuiltin((u'XBMC.Notification("Parental-Lock Error!", "Incorrect code!", 3000)'))
-                    return
-                else:
-                    alreadyinput = True
-        if pilt:
-           plugintools.add_item( action=sync_data("cnVuX2Nyb25qb2I="), title=shou , url=striimilink, thumbnail=pilt, plot=kokku, fanart=os.path.join(LOAD_LIVE,vod_channels("aG9tZXRoZWF0ZXIuanBn")), extra="", isPlayable=True, folder=False )
-        else:
-           plugintools.add_item( action=sync_data("cnVuX2Nyb25qb2I="), title=shou , url=striimilink, thumbnail=os.path.join(LOAD_LIVE,sync_data("bG9nby5wbmc=")) , plot=kokku, fanart=os.path.join(LOAD_LIVE,sync_data("aG9tZXRoZWF0ZXIuanBn")) , extra="", isPlayable=True, folder=False )
-    if sync_data('Y2F0X2lkPTM=') in url:
-      plugintools.set_view( plugintools.EPISODES )
-    else:
-      plugintools.set_view( plugintools.EPISODES )
-    xbmcplugin.addSortMethod(handle=int(sys.argv[1]), sortMethod=xbmcplugin.SORT_METHOD_TITLE)
-def get_myaccount(params):
-        plugintools.log(pnimi+get_live("Vk9EIGNoYW5uZWxzIG1lbnUg")+repr(params))
-        #if vanemalukk == "true":
-           #pealkiri = params.get(sync_data("dGl0bGU="))
-           #vanema_lukk(pealkiri)
-        purl = params.get(get_live("dXJs"))
-        request = urllib2.Request(purl, headers={"Accept" : "application/xml"})
-        u = urllib2.urlopen(request)
-        tree = ElementTree.parse(u)
-        rootElem = tree.getroot()
-        for channel in tree.findall(sync_data("Y2hhbm5lbA==")):
-            pealkiri = channel.find(get_live("dGl0bGU=")).text
+    for channel in tree.findall("channel"):
+        try:
+            pealkiri = channel.find("title").text
             pealkiri = base64.b64decode(pealkiri)
             pealkiri = pealkiri.encode("utf-8")
-            striimilink = channel.find(sync_data("c3RyZWFtX3VybA==")).text
-            pilt = channel.find(sync_data("ZGVzY19pbWFnZQ==")).text
-            kirjeldus = channel.find(vod_channels("ZGVzY3JpcHRpb24=")).text
+            striimilink = channel.find("stream_url").text
+            pilt = channel.find("desc_image").text
+            kirjeldus = channel.find("description").text
             if kirjeldus:
-               kirjeldus = base64.b64decode(kirjeldus) 
+               kirjeldus = base64.b64decode(kirjeldus)
             if pilt:
-               plugintools.add_item( action="restart_service", title=pealkiri , url=striimilink, thumbnail=pilt, plot=kirjeldus, fanart=os.path.join(LOAD_LIVE,"theater.jpg") , extra="", isPlayable=True, folder=False )
+               plugintools.add_item( action="restart_service", title=pealkiri , url=striimilink, thumbnail=pilt, plot=kirjeldus, fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , extra="", isPlayable=True, folder=False )
             else:
-               plugintools.add_item( action="restart_service", title=pealkiri , url=striimilink, thumbnail=os.path.join(LOAD_LIVE,"noposter.jpg"), plot=kirjeldus, fanart="" , extra="", isPlayable=True, folder=False )
-        plugintools.set_view( plugintools.MOVIES )
-        xbmc.executebuiltin('Container.SetViewMode(515)')
+               plugintools.add_item( action="restart_service", title=pealkiri , url=striimilink, thumbnail=os.path.join("dm9kLnBuZw=="), plot=kirjeldus, fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , extra="", isPlayable=True, folder=False )
+        except:
+            kanalinimi = channel.find("title").text
+            kanalinimi = base64.b64decode(kanalinimi)
+            kategoorialink = channel.find("playlist_url").text
+            CatID = channel.find("category_id").text
+            plugintools.add_item( action=get_live("Z2V0X215YWNjb3VudA=="), title=kanalinimi , url=kategoorialink , thumbnail=os.path.join(LOAD_LIVE,sync_data("dm9kLnBuZw==")) , fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) ,info_labels=kanalinimi, folder=True )
 
+    plugintools.set_view( plugintools.EPISODES )
 
 def run_cronjob(params):
-    extend=plugintools.get_setting(vod_channels("ZXh0ZW5k"))
-    plugintools.log(pnimi+sync_data("UExBWV9MSVZF")+repr(params))
-    #if vanemalukk == "true":
-       #pealkiri = params.get(sync_data("dGl0bGU="))
-       #vanema_lukk(pealkiri)
-    lopplink = params.get(vod_channels("dXJs"))
-    lopplink = lopplink.replace('.ts','.%s'%extend)
-    plugintools.play_resolved_url( lopplink )
-	
-def run_cronjobxxx(params):
     kasutajanimi=plugintools.get_setting("Username")
     salasona=plugintools.get_setting("Password")
     lopplink = params.get("url")
     if "http://"  not in lopplink: 
-        lopplink = get_live("aHR0cDovL290dHR2LmdhOjIwOTUvbGl2ZS8lcy8lcy8lcw==")%(kasutajanimi,salasona,lopplink)
+        lopplink = get_live("aHR0cDovLyVzOiVzL2VuaWdtYS5waHAvbGl2ZS8lcy8lcy8lcw==")%(lehekylg,pordinumber,kasutajanimi,salasona,lopplink)
         lopplink = lopplink[:-2]
-        lopplink = lopplink + "m3u8"
+        lopplink = lopplink + "ts"
     listitem = xbmcgui.ListItem(path=lopplink)
     xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, listitem)
-
-
-
 
 def sync_data(channel):
     video = base64.b64decode(channel)
     return video
 
-
 def restart_service(params):
     lopplink = params.get(vod_channels("dXJs"))
     plugintools.play_resolved_url( lopplink )
 
-
-
 def grab_epg():
-    req = urllib2.Request(andmelink)
-    req.add_header(sync_data("VXNlci1BZ2VudA==") , vod_channels("S29kaSBwbHVnaW4gYnkgTWlra00="))
-    response = urllib2.urlopen(req)
-    link=response.read()
-    jdata = json.loads(link.decode('utf8'))
-    response.close()
-    if jdata:
-       plugintools.log(pnimi+sync_data("amRhdGEgbG9hZGVkIA=="))
-       return jdata
+	req = urllib2.Request(andmelink)
+	req.add_header(sync_data("VXNlci1BZ2VudA==") , vod_channels("S29kaSBwbHVnaW4gYnkgTWlra00="))
+	response = urllib2.urlopen(req)
+	link=response.read()
+	try:
+		jdata = json.loads(link.decode('utf8'))
+		response.close()
+		if jdata:
+			plugintools.log(pnimi+sync_data("amRhdGEgbG9hZGVk"))
+			return jdata
+	except ValueError, e:
+		return False
+
 def kontroll():
-    randomstring = grab_epg()
-    kasutajainfo = randomstring[sync_data("dXNlcl9pbmZv")]
-    kontroll = kasutajainfo[get_live("YXV0aA==")]
-    return kontroll
+	try:
+		randomstring = grab_epg()
+		kasutajainfo = randomstring[sync_data("dXNlcl9pbmZv")]
+		kontroll = kasutajainfo[get_live("YXV0aA==")]
+		return kontroll
+	except:
+		return None
 def get_live(channel):
     video = base64.b64decode(channel)
     return video
 def execute_ainfo(params):
-    plugintools.log(pnimi+get_live("TXkgYWNjb3VudCBNZW51IA==")+repr(params))
-    andmed = grab_epg()
-    kasutajaAndmed = andmed[sync_data("dXNlcl9pbmZv")]
-    seis = kasutajaAndmed[get_live("c3RhdHVz")]
-    aegub = kasutajaAndmed[sync_data("ZXhwX2RhdGU=")]
-    if aegub:
-       aegub = datetime.fromtimestamp(int(aegub)).strftime('%d/%m/%Y %H:%M')
-    else:
-       aegub = vod_channels("TmV2ZXI=")
-    leavemealone = kasutajaAndmed[get_live("bWF4X2Nvbm5lY3Rpb25z")]
-    polarbears = kasutajaAndmed[sync_data("dXNlcm5hbWU=")]
-    plugintools.add_item( action="",   title=sync_data("W0NPTE9SID0gd2hpdGVdVXNlcjogWy9DT0xPUl0=")+polarbears , thumbnail=os.path.join(LOAD_LIVE,vod_channels("bGl2ZXR2LnBuZw==")) , fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , folder=False )
-    plugintools.add_item( action="",   title=sync_data("W0NPTE9SID0gd2hpdGVdU3RhdHVzOiBbL0NPTE9SXQ==")+seis , thumbnail=os.path.join(LOAD_LIVE,vod_channels("bGl2ZXR2LnBuZw==")) , fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , folder=False )
-    plugintools.add_item( action="",   title=get_live("W0NPTE9SID0gd2hpdGVdRXhwaXJlczogWy9DT0xPUl0=")+aegub , thumbnail=os.path.join(LOAD_LIVE,vod_channels("bGl2ZXR2LnBuZw==")) , fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , folder=False )
-    plugintools.add_item( action="",   title=vod_channels("W0NPTE9SID0gd2hpdGVdTWF4IGNvbm5lY3Rpb25zOiBbL0NPTE9SXQ==")+leavemealone , thumbnail=os.path.join(LOAD_LIVE,vod_channels("bGl2ZXR2LnBuZw==")) , fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , folder=False )
-    plugintools.set_view( plugintools.LIST )
+	try:
+		s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+		s.connect(("8.8.8.8", 80))
+		localip = s.getsockname()[0]
+	except:
+		localip = None
+	try:
+		f = urllib.urlopen("http://ip.42.pl/raw")
+		html_doc = f.read()
+		f.close()
+	except:
+		html_doc = None
+	try:
+		h = urllib.urlopen("https://myhostname.net")
+		host_doc = h.read()
+		h.close()
+		hostname = re.compile('span id="curHostname" class="notranslate">(.+?)</span>').findall(host_doc)
+		for i in hostname:
+			host = i
+	except:
+		host = None
+	data = json.load(urllib2.urlopen(PlayerAPI))
+	today = datetime.date.today()
+	x=data['user_info']
+	Username = x['username']
+	Status = x['status']
+	Creation = x['created_at']
+	Created = datetime.datetime.fromtimestamp(int(Creation)).strftime('%H:%M %d/%m/%Y')
+	Current = x['active_cons']
+	Max = x['max_connections']
+	Expiry = x['exp_date']
+	if Expiry == None:
+		Expired = 'Never'
+	else:
+		Expired = datetime.datetime.fromtimestamp(int(Expiry)).strftime('%H:%M %d/%m/%Y')
+	plugintools.add_item( action="",   title="[COLOR white][B]User: "+Username+"[/B][/COLOR]", thumbnail=os.path.join(LOAD_LIVE,vod_channels("bXlhY2MucG5n")) , fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , folder=False )
+	plugintools.add_item( action="",   title="[COLOR white][B]Status: "+Status+"[/B][/COLOR]", thumbnail=os.path.join(LOAD_LIVE,vod_channels("bXlhY2MucG5n")) , fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , folder=False )
+	plugintools.add_item( action="",   title="[COLOR white][B]Created: "+Created+"[/B][/COLOR]", thumbnail=os.path.join(LOAD_LIVE,vod_channels("bXlhY2MucG5n")) , fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , folder=False )
+	plugintools.add_item( action="",   title="[COLOR white][B]Expires: "+Expired+"[/B][/COLOR]", thumbnail=os.path.join(LOAD_LIVE,vod_channels("bXlhY2MucG5n")) , fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , folder=False )
+	plugintools.add_item( action="",   title="[COLOR white][B]Max connections: "+Max+"[/B][/COLOR]", thumbnail=os.path.join(LOAD_LIVE,vod_channels("bXlhY2MucG5n")) , fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , folder=False )
+	plugintools.add_item( action="",   title="[COLOR white][B]Active connections: "+Current+"[/B][/COLOR]", thumbnail=os.path.join(LOAD_LIVE,vod_channels("bXlhY2MucG5n")) , fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , folder=False )
+	if localip:
+		plugintools.add_item( action="",   title="[COLOR white]Local IP: "+localip+"[/COLOR]", thumbnail=os.path.join(LOAD_LIVE,vod_channels("bXlhY2MucG5n")) , fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , folder=False )
+	if html_doc:
+		plugintools.add_item( action="",   title="[COLOR white]External IP: "+html_doc+"[/COLOR]", thumbnail=os.path.join(LOAD_LIVE,vod_channels("bXlhY2MucG5n")) , fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , folder=False )
+	if host:
+		plugintools.add_item( action="",   title="[COLOR white]Hostname: "+host+"[/COLOR]", thumbnail=os.path.join(LOAD_LIVE,vod_channels("bXlhY2MucG5n")) , fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , folder=False )
+
+	plugintools.set_view( plugintools.LIST )
 def vanema_lukk(name):
         plugintools.log(pnimi+sync_data("UGFyZW50YWwgbG9jayA="))
-        a = ''
+        a = 'XXX', 'Adult', 'Adults','ADULT','ADULTS','adult','adults','Porn','PORN','porn','Porn','xxx'
         if any(s in name for s in a):
-           xbmc.executebuiltin((u'XBMC.Notification("Parental-Lock", "Channels may contain adult content", 2000)'))
-           text = plugintools.keyboard_input(default_text="", title=get_live("UGFyZW50YWwtTG9jazogUGxlYXNlIGVudGVyIHlvdXIgUGFyZW50YWwgQ29kZQ=="))
+           xbmc.executebuiltin((u'XBMC.Notification("Parental Lock", "Channels may contain adult content", 2000)'))
+           text = plugintools.keyboard_input(default_text="", title=get_live("UGFyZW50YWwgbG9jaw=="))
            if text==plugintools.get_setting(sync_data("dmFuZW1ha29vZA==")):
               return
            else:
               exit()
         else:
            name = ""
-def kontrolli_uuendusi():
-        req = urllib2.Request(uuenduslink)
-        req.add_header(vod_channels("VXNlci1BZ2VudA==") , sync_data("S29kaSBwbHVnaW4gYnkgTWlra00="))
-        response = urllib2.urlopen(req)
-        repoversion=response.read()
-        repoversion = repoversion.partition("\n")
-        iversion = repoversion[1]
-        global dlink
-        dlink = repoversion[2]
-        response.close()
-        if iversion <> version:
-           update = " "
-        else:
-           if plugintools.message_yes_no(pnimi,sync_data("TmV3IHVwZGF0ZSBpcyBhdmFpbGFibGUh"),get_live("RG8geW91IHdhbnQgdG8gdXBkYXRlIHBsdWdpbiBub3c/")):
-              plugintools.log( pnimi+vod_channels("VHJ5aW5nIHRvIHVwZGF0ZSBwbHVnaW4uLi4="))
-              try:
-                  destpathname = xbmc.translatePath(os.path.join(sync_data("c3BlY2lhbDovLw=="),sync_data("aG9tZS9hZGRvbnMv")))
-                  local_file_name = os.path.join( plugintools.get_runtime_path() , get_live("dXBkYXRlLnppcA==") )
-                  plugintools.log(pnimi+local_file_name)
-                  urllib.urlretrieve(dlink, local_file_name )
-                  DownloaderClass(dlink,local_file_name)
-                  plugintools.log(pnimi+sync_data("RXh0cmFjdGluZyB1cGRhdGUuLi4="))
-                  import ziptools
-                  unzipper = ziptools.ziptools()
-                  #destpathname = xbmc.translatePath(os.path.join('special://','home'))
-                  plugintools.log(pnimi+destpathname)
-                  unzipper.extract( local_file_name , destpathname )
-                  os.remove(local_file_name)
-                  xbmc.executebuiltin((u'XBMC.Notification("Updated", "The add-on has been updated", 2000)'))
-                  #import updater
-                  xbmc.executebuiltin( "Container.Refresh" )
-                  plugintools.log(pnimi+get_live("VXBkYXRlIHN1Y2Nlc3M="))
-              except:
-                  plugintools.log(pnimi+get_live("VXBkYXRlIGZhaWxlZA=="))
-                  xbmc.executebuiltin((u'XBMC.Notification("Not updated", "An error causes the update to fail", 2000)'))
-def DownloaderClass(url,dest):
-    dp = xbmcgui.DialogProgress()
-    dp.create(sync_data("R2V0dGluZyB1cGRhdGU="),get_live("RG93bmxvYWRpbmc="))
-    urllib.urlretrieve(url,dest,lambda nb, bs, fs, url=url: _pbhook(nb,bs,fs,url,dp))
 def check_user():
     plugintools.message(get_live("RVJST1I="),vod_channels("VU5BVVRIT1JJWkVEIEVESVQgT0YgQURET04h"))
     sys.exit()
-def _pbhook(numblocks, blocksize, filesize, url=None,dp=None):
-    try:
-        percent = min((numblocks*blocksize*100)/filesize, 100)
-        print percent
-        dp.update(percent)
-    except:
-        percent = 100
-        dp.update(percent)
-    if dp.iscanceled(): 
-        print "DOWNLOAD CANCELLED" # need to get this part working
-        dp.close()
 def load_channels():
     statinfo = os.stat(LOAD_LIVE+"/"+get_live("YmFja2dyb3VuZC5wbmc="))
 
 def vod_channels(channel):
     video = base64.b64decode(channel)
     return video
-run()
 
+run()

@@ -1,12 +1,12 @@
 #         Thanks to PlayList Loader for this great code work, Its added an extra element to our addon      #
-import urllib, urllib2, os, io, xbmc, xbmcaddon, xbmcgui, json, re
+import urllib, urllib2, os, io, xbmc, xbmcaddon, xbmcgui, json, re, time,xbmcplugin,sys,datetime,string,StringIO,logging,random,array,htmllib,xbmcvfs
 
 AddonID = 'plugin.video.ottalpha'
 Addon = xbmcaddon.Addon(AddonID)
 icon = Addon.getAddonInfo('icon')
 AddonName = Addon.getAddonInfo("name")
 
-def OpenURL(url, headers={}, user_data={}, justCookie=False):
+def OpenURL(url, headers={"User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.101 Safari/537.36"}, user_data={}, justCookie=False):
 	if user_data:
 		user_data = urllib.urlencode(user_data)
 		req = urllib2.Request(url, user_data)
@@ -30,6 +30,64 @@ def OpenURL(url, headers={}, user_data={}, justCookie=False):
 	response.close()
 	return data
 
+def KODI_VERSION():
+
+	xbmc_version=xbmc.getInfoLabel("System.BuildVersion")
+	version=float(xbmc_version[:4])
+	if version >= 11.0 and version <= 11.9:
+		codename = 'Eden'
+	elif version >= 12.0 and version <= 12.9:
+		codename = 'Frodo'
+	elif version >= 13.0 and version <= 13.9:
+		codename = 'Gotham'
+	elif version >= 14.0 and version <= 14.9:
+		codename = 'Helix'
+	elif version >= 15.0 and version <= 15.9:
+		codename = 'Isengard'
+	elif version >= 16.0 and version <= 16.9:
+		codename = 'Jarvis'
+	elif version >= 17.0 and version <= 17.9:
+		codename = 'Krypton'
+	else: codename = "Decline"
+	
+	return codename
+
+
+def OPEN_XML(url):
+    req = urllib2.Request(url)
+    req.add_header('User-Agent', 'FabIPTV')
+    response = urllib2.urlopen(req)
+    link=response.read()
+    response.close()
+    return link
+
+def OPEN_URL_NORMAL(url):
+    req = urllib2.Request(url)
+    req.add_header('User-Agent', 'python-requests/2.9.1')
+    response = urllib2.urlopen(req)
+    link=response.read()
+    response.close()
+    return link   
+
+def addItem(name,url,mode,iconimage,fanart,description):
+	u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&fanart="+urllib.quote_plus(fanart)
+	ok=True
+	liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+	liz.setInfo( type="Video", infoLabels={ "Title": name } )
+	liz.setProperty( "Fanart_Image", fanart )
+	ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=False)
+	return ok
+
+def addItem2(name,url,mode,iconimage,fanart,description):
+	#xbmc.log("its here: "+str(len(sys.argv)))
+	u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&fanart="+urllib.quote_plus(fanart)
+	ok=True
+	liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+	liz.setInfo( type="Video", infoLabels={ "Title": name } )
+	liz.setProperty( "Fanart_Image", fanart )
+	ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
+	return ok
+
 def ReadFile(fileName):
 	try:
 		f = open(fileName,'r')
@@ -49,7 +107,7 @@ def ReadList(fileName):
 		if os.path.isfile(fileName):
 			import shutil
 			shutil.copyfile(fileName, "{0}_bak.txt".format(fileName[:fileName.rfind('.')]))
-			xbmc.executebuiltin('Notification({0}, Cannot read file: "{1}". \nBackup createad, {2}, {3})'.format(AddonName, os.path.basename(fileName), 5000, icon))
+			xbmc.executebuiltin('Notification({0}, Cannot read file: "{1}". \nBackup created, {2}, {3})'.format(AddonName, os.path.basename(fileName), 5000, icon))
 		content=[]
 
 	return content

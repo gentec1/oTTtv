@@ -178,8 +178,9 @@ def find_single_match(text,pattern): # Parse string and extracts first match as 
     try: matches=re.findall(pattern,text,flags=re.DOTALL); result=matches[0]
     except: result=""
     return result
-def add_item(action="",title="",plot="",url="",thumbnail="",fanart="",show="",episode="",extra="",page="",info_labels=None,isPlayable=True,folder=True):
-    _log("add_item action=["+action+"] title=[COLOR yellow][B][I]["+title+"][/I][/B][/COLOR] url=["+url+"] thumbnail=["+thumbnail+"] fanart=["+fanart+"] show=["+show+"] episode=["+episode+"] extra=["+extra+"] page=["+page+"] isPlayable=["+str(isPlayable)+"] folder=["+str(folder)+"]")
+def add_item(action="",title="",plot="",url="",thumbnail="",fanart="",show="",episode="",extra="",page="",info_labels=None,isPlayable=False,folder=True):
+    contextMenuItems = []
+    #_log("add_item action=["+action+"] title=["+title+"] url=["+url+"] thumbnail=["+thumbnail+"] fanart=["+fanart+"] show=["+show+"] episode=["+episode+"] extra=["+extra+"] page=["+page+"] isPlayable=["+str(isPlayable)+"] folder=["+str(folder)+"]")
     listitem=xbmcgui.ListItem(title,iconImage="DefaultVideo.png",thumbnailImage=thumbnail)
     if info_labels is None: info_labels={"Title":title,"FileName":title,"Plot":plot}
     listitem.setInfo( "video", info_labels )
@@ -195,7 +196,17 @@ def addItem(name,url,mode,iconimage,fanart):
 	liz.setInfo( type="Video", infoLabels={ "Title": name } )
 	liz.setProperty( "Fanart_Image", fanart )
 	ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=False)
-	
+	return ok
+
+def addItem2(name,url,mode,iconimage,fanart):
+	u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&fanart="+urllib.quote_plus(fanart)
+	ok=True
+	liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+	liz.setInfo( type="Video", infoLabels={ "Title": name } )
+	liz.setProperty( "Fanart_Image", fanart )
+	ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
+	return ok
+
 def close_item_list(): _log("close_item_list"); xbmcplugin.endOfDirectory(handle=int(sys.argv[1]),succeeded=True)
 def play_resolved_url(url):
     _log("play_resolved_url ["+url+"]"); listitem=xbmcgui.ListItem(path=url); listitem.setProperty('IsPlayable','true')
@@ -249,29 +260,38 @@ def selector(option_list,title="Select one"):
     _log("selector title='"+title+"', options="+repr(option_list))
     dia=xbmcgui.Dialog(); selection=dia.select(title,option_list)
     return selection
-def set_view(view_mode, view_code=0):
-    _log("set_view view_mode='"+view_mode+"', view_code="+str(view_code))
+def set_view(view_mode):
+    #_log("set_view view_mode='"+view_mode+"', view_code="+str(view_code))
     # Set the content for extended library views if needed
     if view_mode==MOVIES: _log("set_view content is movies"); xbmcplugin.setContent( int(sys.argv[1]) ,"movies" )
     elif view_mode==TV_SHOWS: _log("set_view content is tvshows"); xbmcplugin.setContent( int(sys.argv[1]) ,"tvshows" )
     elif view_mode==SEASONS: _log("set_view content is seasons"); xbmcplugin.setContent( int(sys.argv[1]) ,"seasons" )
     elif view_mode==EPISODES: _log("set_view content is episodes"); xbmcplugin.setContent( int(sys.argv[1]) ,"episodes" )
-    skin_name=xbmc.getSkinDir() # Reads skin name
-    _log("set_view skin_name='"+skin_name+"'")
-    try:
-        if view_code==0:
-            _log("set_view view mode is "+view_mode)
-            view_codes=ALL_VIEW_CODES.get(view_mode)
-            view_code=view_codes.get(skin_name)
-            _log("set_view view code for "+view_mode+" in "+skin_name+" is "+str(view_code))
-            xbmc.executebuiltin("Container.SetViewMode("+str(view_code)+")")
-        else:
-            _log("set_view view code forced to "+str(view_code))
-            xbmc.executebuiltin("Container.SetViewMode("+str(view_code)+")")
-    except:
-        _log("Unable to find view code for view mode "+str(view_mode)+" and skin "+skin_name)
+#    skin_name=xbmc.getSkinDir() # Reads skin name
+#    _log("set_view skin_name='"+skin_name+"'")
+#    try:
+#        if view_code==0:
+#            _log("set_view view mode is "+view_mode)
+#            view_codes=ALL_VIEW_CODES.get(view_mode)
+#            view_code=view_codes.get(skin_name)
+#            _log("set_view view code for "+view_mode+" in "+skin_name+" is "+str(view_code))
+#            xbmc.executebuiltin("Container.SetViewMode("+str(view_code)+")")
+#        else:
+#            _log("set_view view code forced to "+str(view_code))
+#            xbmc.executebuiltin("Container.SetViewMode("+str(view_code)+")")
+#    except:
+#        _log("Unable to find view code for view mode "+str(view_mode)+" and skin "+skin_name)
 
 f=open(os.path.join(os.path.dirname(__file__),"addon.xml")); data=f.read(); f.close()
 addon_id=find_single_match(data,'id="([^"]+)"')
 if addon_id=="": addon_id=find_single_match(data,"id='([^']+)'")
 __settings__=xbmcaddon.Addon(id=addon_id); __language__=__settings__.getLocalizedString
+
+def addItem2(name,url,mode,iconimage,fanart):
+	u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&fanart="+urllib.quote_plus(fanart)
+	ok=True
+	liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+	liz.setInfo( type="Video", infoLabels={ "Title": name } )
+	liz.setProperty( "Fanart_Image", fanart )
+	ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
+	return ok
