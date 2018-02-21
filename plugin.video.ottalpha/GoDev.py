@@ -20,12 +20,12 @@ ADDON=xbmcaddon.Addon(id='plugin.video.ottalpha')
 dialog       =  xbmcgui.Dialog()
 dialogprocess =  xbmcgui.DialogProgress()
 USERDATA     =  xbmc.translatePath(os.path.join('special://home/userdata/',''))
-FabData      =  xbmc.translatePath(os.path.join('special://home/userdata/addon_data/plugin.video.ottalpha/',''))
+FabData      =  xbmc.translatePath(os.path.join('special://home/userdata/addon_data/plugin.video.Vapoz/',''))
 HOME         =  xbmc.translatePath('special://home/')
 Username=plugintools.get_setting("Username")
 Password=plugintools.get_setting("Password")
 PVRon = plugintools.get_setting("PVRUpdater")
-lehekylg= base64.b64decode("aHR0cDovL3RoZXBrLmNv") #####
+lehekylg= base64.b64decode("aHR0cDovL21sc2guY28=") #####
 pordinumber="2086"
 BASEURL = base64.b64decode("bmFkYQ==")
 AddonRes = xbmc.translatePath(os.path.join('special://home','addons',AddonID,'resources'))
@@ -171,9 +171,9 @@ def disablePVR(self):
 def SpeedChoice():
 	choice = dialog.select("[COLOR white]" + AddonTitle + " Speedtest[/COLOR]", ['[COLOR white]Ookla Speedtest[/COLOR]','[COLOR white]Fast.com Speedtest by Netflix[/COLOR]'])
 	if choice == 0:
-		xbmc.executebuiltin('Runscript("special://home/addons/plugin.video.ottalpha/speedtest.py")')
+		xbmc.executebuiltin('Runscript("special://home/addons/plugin.video.Vapoz/speedtest.py")')
 	if choice == 1:
-		xbmc.executebuiltin('Runscript("special://home/addons/plugin.video.ottalpha/fastload.py")')
+		xbmc.executebuiltin('Runscript("special://home/addons/plugin.video.Vapoz/fastload.py")')
 
 ##########################################################################
 
