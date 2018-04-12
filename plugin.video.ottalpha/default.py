@@ -719,15 +719,8 @@ def execute_ainfo(params):
 	plugintools.add_item( action="",   title="[COLOR white][B]User: "+Username+"[/B][/COLOR]", thumbnail=os.path.join(LOAD_LIVE,vod_channels("bXlhY2MucG5n")) , fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , folder=False )
 	plugintools.add_item( action="",   title="[COLOR white][B]Status: "+Status+"[/B][/COLOR]", thumbnail=os.path.join(LOAD_LIVE,vod_channels("bXlhY2MucG5n")) , fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , folder=False )
 	plugintools.add_item( action="",   title="[COLOR white][B]Created: "+Created+"[/B][/COLOR]", thumbnail=os.path.join(LOAD_LIVE,vod_channels("bXlhY2MucG5n")) , fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , folder=False )
-	plugintools.add_item( action="",   title="[COLOR white][B]Expires: "+Expired+"[/B][/COLOR]", thumbnail=os.path.join(LOAD_LIVE,vod_channels("bXlhY2MucG5n")) , fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , folder=False )
 	plugintools.add_item( action="",   title="[COLOR white][B]Max connections: "+Max+"[/B][/COLOR]", thumbnail=os.path.join(LOAD_LIVE,vod_channels("bXlhY2MucG5n")) , fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , folder=False )
 	plugintools.add_item( action="",   title="[COLOR white][B]Active connections: "+Current+"[/B][/COLOR]", thumbnail=os.path.join(LOAD_LIVE,vod_channels("bXlhY2MucG5n")) , fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , folder=False )
-	if localip:
-		plugintools.add_item( action="",   title="[COLOR white]Local IP: "+localip+"[/COLOR]", thumbnail=os.path.join(LOAD_LIVE,vod_channels("bXlhY2MucG5n")) , fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , folder=False )
-	if html_doc:
-		plugintools.add_item( action="",   title="[COLOR white]External IP: "+html_doc+"[/COLOR]", thumbnail=os.path.join(LOAD_LIVE,vod_channels("bXlhY2MucG5n")) , fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , folder=False )
-	if host:
-		plugintools.add_item( action="",   title="[COLOR white]Hostname: "+host+"[/COLOR]", thumbnail=os.path.join(LOAD_LIVE,vod_channels("bXlhY2MucG5n")) , fanart=os.path.join(LOAD_LIVE,sync_data("dGhlYXRlci5qcGc=")) , folder=False )
 
 	plugintools.set_view( plugintools.LIST )
 def vanema_lukk(name):
