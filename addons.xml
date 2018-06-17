@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addons>
-<addon id="plugin.video.ottalpha" version="4.1" name="[COLOR gold]OTTV TV[/COLOR]" provider-name="OTTTV">
+<addon id="plugin.video.ottalpha" version="4.2" name="[COLOR gold]OTTV TV[/COLOR]" provider-name="OTTTV">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
 		<import addon="script.module.addon.common" optional="true" />
